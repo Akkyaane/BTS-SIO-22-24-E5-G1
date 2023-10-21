@@ -1,11 +1,10 @@
 <?php
     session_start();
-    include "bdd.php";
+    include "../bdd/bdd.php";
     
-    if (!$connection)
+    if (!$db_connect)
     {
         echo "Connexion échouée.";
-        echo "<br><button><a href='views/login/login.html'>Retour</a></button>";
     }
     else {
         if(isset($_POST['submit'])) {
@@ -14,26 +13,21 @@
         }
         else {
             echo "Un ou plusieurs champs sont vides.";
-            echo "<br><button><a href='login.html'>Retour au formulaire</a></button>";
-    
+            echo "<br><button><a href='../../views/login/login.html'>Retour au formulaire</a></button>";
         }
     
-        $query = "SELECT * FROM contacts WHERE username = '$username'";
-        $stmt = $connection->prepare($query);
-        $stmt->execute();
-        $row = $stmt->fetch();
-        //var_dump($row["password"]);
-        /*die();
-        $rowCount = $stmt->rowCount();*/
+        $request = "SELECT * FROM users WHERE email = '$email'";
+        $query = $db_connect -> prepare($request);
+        $query -> execute();
+        $row = $query -> fetch();
     
         if (!password_verify($password, $row["password"])) {
-            echo 'Mot de passe incorrect.';
+            echo 'Mot de passe incorrect. Veuillez recommencer.';
+            echo "<br><button><a href='../../views/login/login.html'>Retour au formulaire</a></button>";
         }
-        else 
-    
-        $_SESSION['username'] = $username;
-    
-        header("Location: account.php");
-
+        else {
+            $_SESSION['username'] = $username;
+            header("Location: ../../views/account/account.php");
+        }
     }
 ?>
