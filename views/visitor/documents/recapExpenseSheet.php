@@ -7,13 +7,19 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documents - Gestion des Frais</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>GSB - Mes documents</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
+    <div class="container mt-5">
+
+
+    </div>
+
+
     <div class="container mt-4">
         <h1>Documents - Gestion des Frais</h1>
-        <a href="nouvelle-fiche.html" class="btn btn-primary mb-2">Nouvelle Fiche de Frais</a>
+        <a href="addExpenseSheet.php" class="btn btn-primary mb-2">Nouvelle Fiche de Frais</a>
 
         <table class="table">
             <thead>

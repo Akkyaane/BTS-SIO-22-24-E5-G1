@@ -3,80 +3,102 @@ session_start();
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSB - Ajout d'une fiche de frais</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center">FICHE DE FRAIS DU VISITEUR</h1>
-        <form>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="visitor-name">Visiteur :</label>
-                    <input type="text" class="form-control" id="visitor-name" placeholder="Nom du Visiteur">
+    <header class="bg-primary text-white text-center py-4">
+        <h1 class="text-center">Soumettre une nouvelle fiche de frais</h1>
+    </header>
+    <main>
+        <div class="container mt-5">
+            <p>Pour chaque catégorie, veuillez inscrire le montant total des dépenses et fournir les justificatifs nécessaires.</p>
+            <form action="../../../models/expenseSheet/addExpenseSheet.php" method="post">
+                <div class="mb-3">
+                    <h3>Informations personnelles</h3>
+                    <input type="text" class="form-control" name="last_name" placeholder="Nom" required>
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="visit-date">Date :</label>
-                    <input type="date" class="form-control" id="visit-date">
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="first_name" placeholder="Prénom" required>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <h2>Frais de Transport</h2>
-                    <label for="transport-amount">Kilométrage :</label>
-                    <input type="number" class="form-control" id="transport-amount" placeholder="Montant en euros">
+                <div class="mb-3">
+                    <input type="email" class="form-control" name="email" placeholder="E-mail" required>
                 </div>
-                <div class="form-group col-md-4">
-                    <h2>Frais de Repas</h2>
-                    <label for="breakfast-amount">Petit-déjeuner :</label>
-                    <input type="number" class="form-control" id="breakfast-amount" placeholder="Montant en euros">
+                <div class="mb-3">
+                    <h3>Informations supplémentaires</h3>
+                    <label for="date">Date de départ :</label>
+                    <input type="date" class="form-control" name="start_date" placeholder="Date" required>
                 </div>
-                <div class="form-group col-md-4">
-                    <h2>Frais d'Hébergement</h2>
-                    <label for="hotel-amount">Nuit d'hôtel :</label>
-                    <input type="number" class="form-control" id="hotel-amount" placeholder="Montant en euros">
+                <div class="mb-3">
+                    <label for="date">Date de retour :</label>
+                    <input type="date" class="form-control" name="end_date" placeholder="Date" required>
                 </div>
-            </div>
-            <div class="form-group">
-                <h2>Frais Divers</h2>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <input type="text" class="form-control" id="expense-description" placeholder="Description">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <input type="number" class="form-control" id="expense-amount" placeholder="Montant en euros">
-                    </div>
+                <div class="mb-3">
+                    <label for="date">Date de la demande de soumission :</label>
+                    <input type="date" class="form-control" name="request_date" placeholder="Date" required>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <input type="text" class="form-control" id="expense-description" placeholder="Description">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <input type="number" class="form-control" id="expense-amount" placeholder="Montant en euros">
-                    </div>
+                <div class="mb-3">
+                    <h3>Frais</h3>
                 </div>
-            </div>
-            <div class="form-group">
-                <h2>Total des Frais :</h2>
-                <input type="number" class="form-control" id="total-amount" disabled>
-            </div>
-            <div class="form-group">
-                <h2>Commentaires (le cas échéant) :</h2>
-                <textarea class="form-control" id="comments" rows="4"></textarea>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="visitor-signature">Signature du Visiteur :</label>
-                    <input type="text" class="form-control" id="visitor-signature" placeholder="Signature du Visiteur">
+                <div class="mb-3">
+                    <h5>Transport</h5>
+                    <input type="number" step=0.01 class="form-control" name="transport_expense" placeholder="Montant total en euros">
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="manager-signature">Signature du Responsable :</label>
-                    <input type="text" class="form-control" id="manager-signature" placeholder="Signature du Responsable">
+                <div class="mb-3">
+                    <input type="file" class="form-control" name="transport_expense_file">
                 </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Soumettre</button>
-        </form>
-    </div>
+                <div class="mb-3">
+                    <h5>Hébergement</h5>
+                    <input type="number" step=0.01 class="form-control" name="accommodation_expense" placeholder="Montant total en euros" >
+                </div>
+                <div class="mb-3">
+                    <input type="file" class="form-control" name="accommodation_expense_file" >
+                </div>
+                <div class="mb-3">
+                    <h5>Alimentation</h5>
+                    <input type="number" step=0.01 class="form-control" name="food_expense" placeholder="Montant total en euros">
+                </div>
+                <div class="mb-3">
+                    <input type="file" class="form-control" name="food_expense_file">
+                </div>
+                <div class="mb-3">
+                    <h5>Évènements</h5>
+                    <input type="number" step=0.01 class="form-control" name="events_expense" placeholder="Montant total en euros">
+                </div>
+                <div class="mb-3">
+                    <input type="file" class="form-control" name="events_expense_file">
+                </div>
+                <div class="mb-3">
+                    <h5>Autres</h5>
+                    <input type="number" step=0.01 class="form-control" name="other_expense" placeholder="Montant total en euros">
+                </div>
+                <div class="mb-3">
+                    <input type="file" class="form-control" name="other_expense_file">
+                </div>
+                <div class="mb-3">
+                    <textarea class="form-control" rows="3" name="message" id="message" placeholder="Écrire un message..." maxlength="500"></textarea><div id="charCount">0/500</div>
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary" name="submit">Envoyer</button>
+                </div>
+                <script>
+                    const textarea = document.getElementById('message');
+                    const charCount = document.getElementById('charCount');
+  
+                    textarea.addEventListener('input', function() {
+                    const remainingChars = textarea.value.length;
+                    charCount.textContent = `${remainingChars}/500`;
+                    });
+                </script>
+            </form>
+        </div>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
