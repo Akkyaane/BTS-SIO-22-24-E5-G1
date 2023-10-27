@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-include "../bdd/bdd.php";
+include "../db/db.php";
 
 if (!$db_connect) {
     echo "Connexion échouée.";
@@ -17,23 +17,25 @@ if (!$db_connect) {
 
         if (empty($email) || empty($password)) {
             echo "Un ou plusieurs champs sont vides. Veuillez recommencer.";
-            echo "<br><br><button><a href='../../views/login/login.html'>Retour au formulaire</a></button>";
+            echo "<br><br><button><a href='../../../views/authentication/login/login.html'>Retour au formulaire</a></button>";
         } elseif (!$row) {
             echo 'Aucun utilisateur trouvé avec cet adresse e-mail. Veuillez recommencer.';
-            echo "<br><br><button><a href='../../views/login/login.html'>Retour au formulaire</a></button>";
+            echo "<br><br><button><a href='../../../views/authentication/login/login.html'>Retour au formulaire</a></button>";
         } elseif (!password_verify($password, $row["password"])) {
             echo 'Le mot de passe est incorrect. Veuillez recommencer.';
-            echo "<br><br><button><a href='../../views/login/login.html'>Retour au formulaire</a></button>";
+            echo "<br><br><button><a href='../../../views/authentication/login/login.html'>Retour au formulaire</a></button>";
         } else {
             $first_name = $row["first_name"];
             $last_name = $row["last_name"];
+            $role = $row["role"];
             $_SESSION['first_name'] = $first_name;
             $_SESSION['last_name'] = $last_name;
-            header("Location: ../../views/account/account.php");
+            $_SESSION['role'] = $role;
+            header("Location: ../../../controllers/index.php");
         }
     } else {
         echo "Un ou plusieurs champs sont vides.";
-        echo "<br><br><button><a href='../../views/login/login.html'>Retour au formulaire</a></button>";
+        echo "<br><br><button><a href='../../../views/authentication/login/login.html'>Retour au formulaire</a></button>";
     }
 }
 

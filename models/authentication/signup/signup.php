@@ -1,11 +1,11 @@
 <?php
 
 session_start();
-include "../bdd/bdd.php";
+include "../db/db.php";
 
 if (!$db_connect) {
     echo "Connexion échouée.";
-    echo "<br><br><button><a href='../../views/signup/signup.html'>Retour</a></button>";
+    echo "<br><br><button><a href='../../../views/authentication/signup/signup.html'>Retour</a></button>";
 } else {
     if (isset($_POST['submit'])) {
         $first_name = $_POST['first_name'];
@@ -17,10 +17,10 @@ if (!$db_connect) {
 
         if (empty($first_name) || empty($last_name) || empty($email) || empty($password) || empty($password_match) || empty($role)) {
             echo "Un ou plusieurs champs sont vides. Veuillez recommencer.";
-            echo "<br><br><button><a href='../../views/signup/signup.html'>Retour</a></button>";
+            echo "<br><br><button><a href='../../../views/authentication/signup/signup.html'>Retour</a></button>";
         } elseif ($password != $password_match) {
             echo "Les mots de passe ne correspondent pas. Veuillez recommencer.";
-            echo "<br><br><button><a href='../../views/signup/signup.html'>Retour</a></button>";
+            echo "<br><br><button><a href='../../../views/authentication/signup/signup.html'>Retour</a></button>";
         } else {
             $hash = password_hash($password, PASSWORD_DEFAULT);
             $request = $db_connect->prepare('INSERT INTO users (first_name, last_name, email, password, role) VALUES (:fn, :ln, :e, :p, :r)');
@@ -30,7 +30,7 @@ if (!$db_connect) {
         }
     } else {
         echo "Un ou plusieurs champs sont vides. Veuillez recommencer.";
-        echo "<br><br><button><a href='../../views/signup/signup.html'>Retour</a></button>";
+        echo "<br><br><button><a href='../../../views/authentication/signup/signup.html'>Retour</a></button>";
     }
 }
 
