@@ -17,7 +17,7 @@ session_start();
     </header>
     <main>
         <div class="container mt-5">
-            <p>Pour chaque catégorie, veuillez inscrire le montant total des dépenses et fournir les justificatifs nécessaires.</p>
+            <p>Pour chaque catégorie, veuillez inscrire le montant total des dépenses et fournir les justificatifs nécessaires. Si aucune dépense n'a été faite, veuillez laisser le champ vide.</p>
             <form action="../../../models/expenseSheet/addExpenseSheet.php" method="post">
                 <div class="mb-3">
                     <h3>Informations générales</h3>
@@ -40,7 +40,7 @@ session_start();
                 </div>
                 <div class="mb-3">
                     <h5>Transport</h5>
-                    <select class="form-select" id="transport_category" onchange="showDiv(this)" required>
+                    <select class="form-select" name="transport_category" id="transport_category" onchange="showDiv(this)" required>
                         <option hidden selected>Sélectionnez le type de transport</option>
                         <option value="1">Avion</option>
                         <option value="2">Bus</option>
@@ -51,10 +51,7 @@ session_start();
                     </select>
                 </div>
                 <div class="mb-3">
-                    <input type="number" step=0.01 class="form-control form-control-v2" id="mileage_expenses" name="mileage_expenses" placeholder="Nombre total de kilomètres">
-                </div>
-                <div class="mb-3">
-                    <input type="number" step=0.01 class="form-control form-control-v2" id="tax_horsepower" name="tax_horsepower" placeholder="Nombre de chevaux">
+                    <input type="number" step=0.01 class="form-control form-control-v2" id="kilometers_expense" name="kilometers_expense" placeholder="Nombre total de kilomètres">
                 </div>
                 <div class="mb-3">
                     <input type="number" step=0.01 class="form-control form-control-v2" id="transport_expense" name="transport_expense" placeholder="Montant total en euros">
@@ -100,14 +97,12 @@ session_start();
 
                     function showDiv(select){
                         if(select.value== 1 || 2 || 3 || 4 || 5){
-                            document.getElementById('mileage_expenses').style.display = "none";
-                            document.getElementById('tax_horsepower').style.display = "none";
+                            document.getElementById('kilometers_expense').style.display = "none";
                             document.getElementById('transport_expense').style.display = "block";
                             document.getElementById('transport_expense_file').style.display = "block";
                         }
                         if (select.value== 6) {
-                            document.getElementById('mileage_expenses').style.display = "block";
-                            document.getElementById('tax_horsepower').style.display = "block";
+                            document.getElementById('kilometers_expense').style.display = "block";
                             document.getElementById('transport_expense').style.display = "none";
                             document.getElementById('transport_expense_file').style.display = "none";
                         };
