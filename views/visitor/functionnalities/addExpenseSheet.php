@@ -18,7 +18,7 @@ session_start();
     <main>
         <div class="container mt-5">
             <p>Pour chaque catégorie, veuillez inscrire le montant total des dépenses et fournir les justificatifs nécessaires. Si aucune dépense n'a été faite, veuillez laisser le champ vide.</p>
-            <form action="../../../models/expenseSheet/addExpenseSheet.php" method="post">
+            <form action="../../../models/expenseSheet/addExpenseSheet.php" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <h3>Informations générales</h3>
                     <label for="date">Date de départ :</label>
@@ -64,21 +64,21 @@ session_start();
                     <input type="number" step=0.01 class="form-control" name="accommodation_expense" placeholder="Montant total en euros" >
                 </div>
                 <div class="mb-3">
-                    <input type="file" class="form-control" name="accommodation_expense_file" >
+                    <input type="file" class="form-control" id="accommodation_expense_file" name="accommodation_expense_file">
                 </div>
                 <div class="mb-3">
                     <h5>Alimentation</h5>
                     <input type="number" step=0.01 class="form-control" name="food_expense" placeholder="Montant total en euros">
                 </div>
                 <div class="mb-3">
-                    <input type="file" class="form-control" name="food_expense_file">
+                    <input type="file" class="form-control" id="food_expense_file" name="food_expense_file">
                 </div>
                 <div class="mb-3">
                     <h5>Autres</h5>
                     <input type="number" step=0.01 class="form-control" name="other_expense" placeholder="Montant total en euros">
                 </div>
                 <div class="mb-3">
-                    <input type="file" class="form-control" name="other_expense_file">
+                    <input type="file" class="form-control"  id="other_expense_file" name="other_expense_file">
                 </div>
                 <div class="mb-3">
                     <textarea class="form-control" rows="3" name="message" id="message" placeholder="Écrire un message..." maxlength="500"></textarea><div id="charCount">0/500</div>

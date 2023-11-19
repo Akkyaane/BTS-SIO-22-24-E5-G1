@@ -25,12 +25,14 @@ if (!$db_connect) {
             echo 'Le mot de passe est incorrect. Veuillez recommencer.';
             echo "<br><br><button><a href='../../../views/authentication/login/login.html'>Retour au formulaire</a></button>";
         } else {
-            $first_name = $row["first_name"];
-            $last_name = $row["last_name"];
-            $role = $row["role"];
+            $first_name = $row['first_name'];
+            $last_name = $row['last_name'];
+            $role = $row['role'];
+            $email = $row['email'];
             $_SESSION['first_name'] = $first_name;
             $_SESSION['last_name'] = $last_name;
             $_SESSION['role'] = $role;
+            $_SESSION['email'] = $email;
             header("Location: ../../../controllers/index.php");
         }
     } else {
