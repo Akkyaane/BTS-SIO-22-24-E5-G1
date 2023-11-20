@@ -1,43 +1,39 @@
 <?php
 
 session_start();
-include "../db/db.php";
+include "../../db/db.php";
 
 if (!$db_connect) {
     echo "Connexion échouée.";
+    echo "<br><button><a href='../../../views/authentication/login/login.php'>Retour</a></button>";
 } else {
     if (isset($_POST['submit'])) {
         $email = $_POST['email'];
         $password = $_POST['password'];
-
-        $request = "SELECT * FROM users WHERE email = '$email'";
-        $query = $db_connect->prepare($request);
-        $query->execute();
-        $row = $query->fetch();
-
+        $sql = "SELECT * FROM users WHERE email = ?";
+        $request = $db_connect->prepare($sql);
+        $request->bindParam(1, $email, PDO::PARAM_STR);
+        $request->execute();
+        $row = $request->fetch(PDO::FETCH_ASSOC);
         if (empty($email) || empty($password)) {
             echo "Un ou plusieurs champs sont vides. Veuillez recommencer.";
-            echo "<br><br><button><a href='../../../views/authentication/login/login.html'>Retour au formulaire</a></button>";
-        } elseif (!$row) {
+            echo "<br><button><a href='../../../views/authentication/login/login.php'>Retour</a></button>";
+        } elseif ($email != $row['email']) {
             echo 'Aucun utilisateur trouvé avec cet adresse e-mail. Veuillez recommencer.';
-            echo "<br><br><button><a href='../../../views/authentication/login/login.html'>Retour au formulaire</a></button>";
-        } elseif (!password_verify($password, $row["password"])) {
+            echo "<br><button><a href='../../../views/authentication/login/login.php'>Retour</a></button>";
+        } elseif (!password_verify($password, $row['password'])) {
             echo 'Le mot de passe est incorrect. Veuillez recommencer.';
-            echo "<br><br><button><a href='../../../views/authentication/login/login.html'>Retour au formulaire</a></button>";
+            echo "<br><button><a href='../../../views/authentication/login/login.php'>Retour</a></button>";
         } else {
-            $first_name = $row['first_name'];
-            $last_name = $row['last_name'];
-            $role = $row['role'];
-            $email = $row['email'];
-            $_SESSION['first_name'] = $first_name;
-            $_SESSION['last_name'] = $last_name;
-            $_SESSION['role'] = $role;
-            $_SESSION['email'] = $email;
+            $_SESSION['first_name'] = $row['first_name'];
+            $_SESSION['last_name'] = $row['last_name'];
+            $_SESSION['email'] = $row['email'];
+            $_SESSION['role'] = $row['role'];
             header("Location: ../../../controllers/index.php");
         }
     } else {
-        echo "Un ou plusieurs champs sont vides.";
-        echo "<br><br><button><a href='../../../views/authentication/login/login.html'>Retour au formulaire</a></button>";
+        echo "Un problème est survenu. Veuillez recommencer.";
+        echo "<br><button><a href='../../../views/authentication/login/login.php'>Retour</a></button>";
     }
 }
 
