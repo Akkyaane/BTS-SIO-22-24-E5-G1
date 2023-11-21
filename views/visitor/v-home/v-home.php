@@ -9,12 +9,13 @@ if (!$db_connect) {
 } else {
   $sql = 'SELECT * FROM expenseSheets where email = ?';
   $request = $db_connect->prepare($sql);
-  $request->bindParam(1, $email, PDO::PARAM_INT);
+  $request->bindParam(1, $email, PDO::PARAM_STR);
   $request->execute();
   $data = $request->fetch(PDO::FETCH_ASSOC);
   if ($data) {
-    $sql = 'SELECT u.email, e.* FROM users u INNER JOIN expenseSheets e ON u.email = e.email';
+    $sql = 'SELECT u.email, e.* FROM users u INNER JOIN expenseSheets e ON u.email = e.email where u.email = ?';
     $request = $db_connect->prepare($sql);
+    $request->bindParam(1, $email, PDO::PARAM_STR);
     $request->execute();
   }
 }
@@ -60,9 +61,9 @@ if (!$db_connect) {
         <thead>
           <tr>
             <th>Période</th>
-            <th>Nombre de nuits</th>
-            <th>Créé le</th>
-            <th>Montant total</th>
+            <th>Nuitées</th>
+            <th>Montant</th>
+            <th>Créée le</th>
             <th>Traitement</th>
             <th></th>
           </tr>
@@ -77,30 +78,37 @@ if (!$db_connect) {
                 $end_date = $row['end_date'];
                 $nights_number = $row['nights_number'];
                 $request_date = $row['request_date'];
+                $treatment_status = $row['treatment_status'];
                 echo '
                           <tr>
                             <td>Du ' . '<strong>' . $start_date . '</strong>' . ' au ' . '<strong>' . $end_date . '</strong></td>
-                            <td>' . $nights_number . '</td>
-                            <td>' . $request_date . '</td>
+                            <td>' .$nights_number. '</td>
                             <td>Indisponible</td>
-                            <td>Indisponible</td>
-                            <td>
+                            <td>'.$request_date.'</td>';
+                            if (!$treatment_status) {
+                              echo '<td>En attente</td>;
+                              <td>
                               <button class="btn btn-sm btn-primary"><a href="../v-functionalities/v-ExpenseSheet/v-ReadExpenseSheet.php?readid=' . $id . '"style="color: white">Consulter</a></button>
                               <button class="btn btn-sm btn-primary"><a href="../v-functionalities/v-ExpenseSheet/v-UpdateExpenseSheet.php?updateid=' . $id . '"style="color: white">Modifier</a></button>
                               <button class="btn btn-sm btn-danger"><a href="../../../models/visitor/v-ExpenseSheet/v-DeleteExpenseSheet.php?deleteid=' . $id . '>"style="color: white">Supprimer</a></button>
-                            </td>
-                          </tr>
-                          ';
+                              </td>';
+                            } else {
+                              echo '<td>'.$treatment_status.'</td>
+                              <td>
+                              <button class="btn btn-sm btn-primary"><a href="../v-functionalities/v-ExpenseSheet/v-ReadExpenseSheet.php?readid=' . $id . '"style="color: white">Consulter</a></button>
+                              </td>';
+                            }
+                            echo '</tr>';
               };
             };
           } else {
             echo '
                         <tr>
-                          <td>Indisponible</td>
-                          <td>Indisponible</td>
-                          <td>Indisponible</td>
-                          <td>Indisponible</td>
-                          <td>Indisponible</td>
+                          <td>Aucun résultat</td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
                           <td>
                           </td>
                         </tr>

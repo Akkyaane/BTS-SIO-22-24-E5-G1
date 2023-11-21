@@ -1,6 +1,21 @@
 <?php
 
 session_start();
+include "../../../models/db/db.php";
+
+if (!$db_connect) {
+  echo "Connexion échouée.";
+} else {
+  $sql = 'SELECT * FROM expenseSheets';
+  $request = $db_connect->prepare($sql);
+  $request->execute();
+  $data = $request->fetch(PDO::FETCH_ASSOC);
+  if ($data) {
+    $sql = 'SELECT u.*, e.* FROM users u INNER JOIN expenseSheets e ON u.email = e.email';
+    $request = $db_connect->prepare($sql);
+    $request->execute();
+  }
+}
 
 ?>
 
@@ -38,6 +53,64 @@ session_start();
           <?php echo $_SESSION['first_name'] . " " . $_SESSION['last_name'] ?>
         </h3>
       </div>
+    </div>
+    <div class="container mt-5">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Période</th>
+            <th>Nuitées</th>
+            <th>Montant</th>
+            <th>Créée le :</th>
+            <th>Par :</th>
+            <th>Traitement</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          if ($data) {
+            while ($array = $request->fetchAll()) {
+              foreach ($array as $row) {
+                $id = $row['id'];
+                $start_date = $row['start_date'];
+                $end_date = $row['end_date'];
+                $nights_number = $row['nights_number'];
+                $request_date = $row['request_date'];
+                $last_name = $row['last_name'];
+                $first_name = $row['first_name'];
+                $treatment_status = $row['treatment_status'];
+                echo '
+                          <tr>
+                            <td>Du ' . '<strong>' . $start_date . '</strong>' . ' au ' . '<strong>' . $end_date . '</strong></td>
+                            <td>' . $nights_number . '</td>
+                            <td>Indisponible</td>
+                            <td>' . $request_date . '</td>
+                            <td>'.$last_name.' '.$first_name.'</td>
+                            <td>'.$treatment_status.'</td>
+                            <td>
+                              <button class="btn btn-sm btn-primary"><a href="../ac-functionalities/ac-ExpenseSheetValidationProcess/ac-UpdateExpenseSheet.php?updateid=' . $id . '"style="color: white">Traiter</a></button>
+                            </td>
+                          </tr>
+                          ';
+              };
+            };
+          } else {
+            echo '
+                        <tr>
+                          <td>Aucun résultat</td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td>
+                          </td>
+                        </tr>
+                        ';
+          }
+          ?>
+        </tbody>
+      </table>
     </div>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"

@@ -45,7 +45,6 @@ if (isset($_POST['submit'])) {
         } else {
             echo "Vous avez saisi une valeur pour le champ 'Autres' mais pas de message. Veuillez recommencer.";
             echo "<br><button><a href='../../../views/visitor/v-functionalities/v-ExpenseSheet/v-UpdateExpenseSheet.php?updateid=$id'>Retour</a></button>";
-            die;
         }
     } else {
         $expenseSheet[':oe'] = NULL;

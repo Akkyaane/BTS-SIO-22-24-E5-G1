@@ -127,14 +127,21 @@ if (!$db_connect) {
                         value="<?php echo $data['message']; ?>"></textarea>
                     <div id="charCount">0/500</div>
                 </div>
+                <script>
+                    charCount()
+                </script>
+                <div class="mb-3">
+                    <h4>A compléter par le comptable</h4>
+                    <h5>Détails du refus</h5>
+                    <div class="mb-3">
+                        <textarea class="form-control" rows="3" name="remark" id="remark" placeholder="Écrire une remarque..." maxlength="500" value="<?php echo $data['remark']; ?>" readonly></textarea><div id="charCount">0/500</div>
+                    </div>
+                </div>
                 <div class="mb-3">
                     <button type="submit" class="btn btn-primary" name="submit" id="submit">Envoyer</button>
                     <button class="btn btn-primary"><a href="../../v-home/v-home.php"
                             style="color: white">Retour</a></button>
                 </div>
-                <script>
-                    charCount()
-                </script>
             </form>
         </div>
     </main>
