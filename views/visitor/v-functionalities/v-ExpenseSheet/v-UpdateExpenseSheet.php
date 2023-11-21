@@ -37,7 +37,8 @@ if (!$db_connect) {
         <div class="container mt-5">
             <p>Attention : Pour chaque catégorie, veuillez inscrire le montant total des dépenses effectuées et fournir
                 les justificatifs nécessaires. Sinon, laissez le champ vide.</p>
-            <form action="../../../../models/visitor/v-ExpenseSheet/v-UpdateExpenseSheet.php?updateid=<?php echo $id; ?>"
+            <form
+                action="../../../../models/visitor/v-ExpenseSheet/v-UpdateExpenseSheet.php?updateid=<?php echo $id; ?>"
                 method="post">
                 <div class="mb-3">
                     <h3>Informations générales</h3>
@@ -128,6 +129,8 @@ if (!$db_connect) {
                 </div>
                 <div class="mb-3">
                     <button type="submit" class="btn btn-primary" name="submit" id="submit">Envoyer</button>
+                    <button class="btn btn-primary"><a href="../../v-home/v-home.php"
+                            style="color: white">Retour</a></button>
                 </div>
                 <script>
                     charCount()

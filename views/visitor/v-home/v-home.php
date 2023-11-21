@@ -60,6 +60,7 @@ if (!$db_connect) {
             <th>Créé le</th>
             <th>Montant total</th>
             <th>Traitement</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
