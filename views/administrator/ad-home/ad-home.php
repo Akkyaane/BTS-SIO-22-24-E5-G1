@@ -1,6 +1,16 @@
 <?php
 
 session_start();
+include "../../../models/db/db.php";
+
+if (!$db_connect) {
+  echo "Connexion échouée.";
+} else {
+  $sql = 'SELECT * FROM users';
+  $request = $db_connect->prepare($sql); // sert à préparer la connexion à la base de donnée
+  $request->execute();
+  $data = $request->fetch(PDO::FETCH_ASSOC);
+}
 
 ?>
 
@@ -39,6 +49,65 @@ session_start();
         </h3>
       </div>
     </div>
+
+
+    <div class="container mt-5">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          if ($data) {
+            while ($array = $request->fetchAll()) {
+              foreach ($array as $row) {
+                $id = $row['id'];
+                $first_name = $row['first_name'];      // sert à afficher le tableau à partir des infos de la bdd
+                $last_name = $row['last_name'];
+                $email = $row['email'];
+                $role = $row['role'];
+                echo '
+                          <tr>
+                            <td>'.$last_name.'</td>
+                            <td>' .$first_name. '</td>
+                            <td>' .$email. '</td>
+                            <td>'.$role.'</td>
+                            <td>
+                              <button class="btn btn-sm btn-primary"><a href="../ad-functionalities/ad-UsersArray/ad-ManagePersonnalDataUser.php?updateid=' . $id . '" style="color: white">Gérer</a></button>
+                            </td>';
+              }
+            }
+          }
+          else {
+            echo '
+                        <tr>
+                          <td>Aucun utilisateur</td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td>
+                          </td>
+                        </tr>
+                        ';
+          }
+          ?>
+        </tbody>
+      </table>
+    </div>
+    <div class="container mt-5" style="display: flex; justify-content: left">
+      <a href="../ad-functionalities/ad-UsersArray/ad-AddUser.php" class="btn btn-primary mb-2">Créer un nouvel utilisateur</a>
+    </div>
+
+
+
+
   </main>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"

@@ -1,9 +1,27 @@
+<?php
+
+session_start();
+include "../../../../models/db/db.php";
+
+if (!$db_connect) {
+    echo "Connexion échouée.";
+} else {
+    $id = $_GET['updateid'];
+    $sql = "SELECT * FROM users WHERE id = ?";
+    $result = $db_connect->prepare($sql);
+    $result->bindParam(1, $id, PDO::PARAM_INT);
+    $result->execute();
+    $data = $result->fetch(PDO::FETCH_ASSOC);
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GSB - Page d'inscription</title>
+    <title>GSB - Gérer l'utilisateur</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -13,16 +31,16 @@
   </head>
   <body>
     <div class="container mt-5">
-      <form action="../../../models/authentication/signup/signup.php" method="post">
+      <form action="../../../../models/administrator/ad-UsersArray/ad-ManagePersonnalDataUser.php?updateid=<?php echo $id; ?>" method="post">
         <div class="mb-3">
-          <p class="h3">Ajouter un utilisateur à la base de données</p>
+          <p class="h3">Modifier l'utilisateur</p>
         </div>
         <div class="mb-3">
           <input
             type="text"
             class="form-control"
             name="first_name"
-            placeholder="Prénom"
+            value="<?php echo $data['first_name']; ?>"
             required
           />
         </div>
@@ -31,7 +49,7 @@
             type="text"
             class="form-control"
             name="last_name"
-            placeholder="Nom"
+            value="<?php echo $data['last_name']; ?>"
             required
           />
         </div>
@@ -40,39 +58,33 @@
             type="email"
             class="form-control"
             name="email"
-            placeholder="E-mail"
+            value="<?php echo $data['email']; ?>"
             required
           />
         </div>
         <div class="mb-3">
-          <input
-            type="password"
-            class="form-control"
-            name="password"
-            placeholder="Mot de passe"
-            required
-          />
+        <select class="form-select" name="role" id="role" required>
+                        <option selected hidden>Choisir une fonction</option>
+                        <option value="1" <?php if ($data['role'] == '1')
+                            ; ?>>Administrateur
+                        </option>
+                        <option value="2" <?php if ($data['role'] == '2')
+                            ; ?>>Comptable
+                        </option>
+                        <option value="3" <?php if ($data['role'] == '3')
+                            ; ?>>Visiteur médical
+                        </option>
+                    </select>
         </div>
-        <div class="mb-3">
-          <input
-            type="password"
-            class="form-control"
-            name="password_match"
-            placeholder="Vérification du mot de passe"
-            required
-          />
-        </div>
-        <div class="mb-3">
-          <select class="form-select" name="role" required>
-            <option disabled selected value>Choisir une fonction</option>
-            <option value="1">Administrateur</option>
-            <option value="2">Comptable</option>
-            <option value="3">Visiteur médical</option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn-primary" name="submit">
-          Envoyer
+        <button class="btn btn-primary"><a href="../../ad-home/ad-home.php" style="color: white;">Retour</a>
         </button>
+        <button type="submit" class="btn btn-primary" name="edit_submit">
+          Modifier
+        </button>
+        <button type="submit" class="btn btn-danger" name="disable_submit">
+          Désactiver
+        </button>
+        </div>
       </form>
     </div>
     <script

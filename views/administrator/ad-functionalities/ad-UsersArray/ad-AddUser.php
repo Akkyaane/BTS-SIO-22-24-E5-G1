@@ -13,7 +13,7 @@
   </head>
   <body>
     <div class="container mt-5">
-      <form action="../../../models/authentication/signup/signup.php" method="post">
+      <form action="../../../../models/authentication/signup/signup.php" method="post">
         <div class="mb-3">
           <p class="h3">Ajouter un utilisateur à la base de données</p>
         </div>
