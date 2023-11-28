@@ -34,13 +34,13 @@
       <div class="mb-3">
         <select class="form-select" name="role" id="role" required>
           <option selected hidden>Choisir une fonction</option>
-          <option value="1">Administrateur</option>
-          <option value="2">Comptable</option>
-          <option value="3">Visiteur médical</option>
+          <option value="administrator">Administrateur</option>
+          <option value="accountant">Comptable</option>
+          <option value="visitor">Visiteur médical</option>
         </select>
       </div>
       <button type="submit" class="btn btn-primary" name="submit" id="submit">
-        Envoyer
+        Inscrire
       </button>
     </form>
   </div>

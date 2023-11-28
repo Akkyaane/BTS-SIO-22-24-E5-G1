@@ -2,20 +2,20 @@
 
 session_start();
 include "../../../models/db/db.php";
-$email = $_SESSION['email'];
+$id = $_SESSION['id'];
 
 if (!$db_connect) {
   echo "Connexion échouée.";
 } else {
-  $sql = 'SELECT * FROM expenseSheets where email = ?';
+  $sql = 'SELECT * FROM expenseSheets where user_id = ?';
   $request = $db_connect->prepare($sql);
-  $request->bindParam(1, $email, PDO::PARAM_STR);
+  $request->bindParam(1, $id, PDO::PARAM_INT);
   $request->execute();
   $data = $request->fetch(PDO::FETCH_ASSOC);
   if ($data) {
-    $sql = 'SELECT u.email, e.* FROM users u INNER JOIN expenseSheets e ON u.email = e.email where u.email = ?';
+    $sql = 'SELECT u.id, e.*, t.* FROM users u INNER JOIN expensesheets e ON u.id = e.user_id INNER JOIN treatment t ON e.id = t.expense_sheet_id WHERE u.id = ?';
     $request = $db_connect->prepare($sql);
-    $request->bindParam(1, $email, PDO::PARAM_STR);
+    $request->bindParam(1, $id, PDO::PARAM_STR);
     $request->execute();
   }
 }
@@ -79,26 +79,25 @@ if (!$db_connect) {
                 $nights_number = $row['nights_number'];
                 $request_date = $row['request_date'];
                 $treatment_status = $row['treatment_status'];
-                echo '
-                          <tr>
-                            <td>Du ' . '<strong>' . $start_date . '</strong>' . ' au ' . '<strong>' . $end_date . '</strong></td>
-                            <td>' .$nights_number. '</td>
-                            <td>Indisponible</td>
-                            <td>'.$request_date.'</td>';
-                            if (!$treatment_status) {
-                              echo '<td>En attente</td>;
+                $other_expense_file = $row['other_expense_file'];
+                echo '<tr>
+                        <td>Du ' . '<strong>' . $start_date . '</strong>' . ' au ' . '<strong>' . $end_date . '</strong></td>
+                        <td>' . $nights_number . '</td>
+                        <td>Indisponible</td>
+                        <td>' . $request_date . '</td>';
+                if (!$treatment_status) {
+                  echo '<td>En attente</td>
+                        <td>
+                          <button class="btn btn-sm btn-primary"><a href="../v-functionalities/v-ExpenseSheet/v-ReadExpenseSheet.php?readid=' . $id . '"style="color: white">Consulter</a></button>
+                          <button class="btn btn-sm btn-primary"><a href="../v-functionalities/v-ExpenseSheet/v-UpdateExpenseSheet.php?updateid=' . $id . '"style="color: white">Modifier</a></button>
+                          <button class="btn btn-sm btn-danger"><a href="../../../models/visitor/v-ExpenseSheet/v-DeleteExpenseSheet.php?deleteid=' . $id . '>"style="color: white">Supprimer</a></button>
+                        </td>';
+                } else {
+                  echo '<td>' . $treatment_status . '</td>
                               <td>
                               <button class="btn btn-sm btn-primary"><a href="../v-functionalities/v-ExpenseSheet/v-ReadExpenseSheet.php?readid=' . $id . '"style="color: white">Consulter</a></button>
-                              <button class="btn btn-sm btn-primary"><a href="../v-functionalities/v-ExpenseSheet/v-UpdateExpenseSheet.php?updateid=' . $id . '"style="color: white">Modifier</a></button>
-                              <button class="btn btn-sm btn-danger"><a href="../../../models/visitor/v-ExpenseSheet/v-DeleteExpenseSheet.php?deleteid=' . $id . '>"style="color: white">Supprimer</a></button>
                               </td>';
-                            } else {
-                              echo '<td>'.$treatment_status.'</td>
-                              <td>
-                              <button class="btn btn-sm btn-primary"><a href="../v-functionalities/v-ExpenseSheet/v-ReadExpenseSheet.php?readid=' . $id . '"style="color: white">Consulter</a></button>
-                              </td>';
-                            }
-                            echo '</tr>';
+                };
               };
             };
           } else {

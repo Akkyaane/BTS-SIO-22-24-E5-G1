@@ -25,10 +25,8 @@ if (!$db_connect) {
             echo 'Le mot de passe est incorrect. Veuillez recommencer.';
             echo "<br><button><a href='../../../views/authentication/login/login.php'>Retour</a></button>";
         } else {
-            $_SESSION['first_name'] = $row['first_name'];
-            $_SESSION['last_name'] = $row['last_name'];
-            $_SESSION['email'] = $row['email'];
-            $_SESSION['role'] = $row['role'];
+            $_SESSION = ['id' => $row['id'], 'first_name' => $row['first_name'], 'last_name' => $row['last_name'], 'email' => $row['email'], 'role' => $row['role']];
+            var_dump($_SESSION);
             header("Location: ../../../controllers/index.php");
         }
     } else {

@@ -35,18 +35,13 @@ session_start();
                     <input type="date" class="form-control" name="end_date" id="end_date" required>
                 </div>
                 <div class="mb-3">
-                    <input type="number" class="form-control" name="nights_number" id="nights_number"
-                        placeholder="Nombre de nuitées" required>
-                </div>
-                <div class="mb-3">
                     <label for="date">Demande effectuée le :</label>
                     <input type="date" class="form-control" name="request_date" id="request_date" required>
                 </div>
                 <div class="mb-3">
                     <h3>Frais</h3>
                     <h5>Transport</h5>
-                    <select class="form-select" name="transport_category" id="transport_category"
-                        onchange="showDiv(this)">
+                    <select class="form-select" name="transport_category" id="transport_category">
                         <option selected hidden>Sélectionnez le type de transport</option>
                         <option value="1">Avion</option>
                         <option value="2">Train</option>
@@ -55,19 +50,23 @@ session_start();
                     </select>
                 </div>
                 <div class="mb-3">
-                    <input type="number" step=0.01 class="form-control hidden" name="kilometers_expense"
-                        id="kilometers_expense" placeholder="Nombre total de kilomètres">
+                    <input type="number" step=0.01 class="form-control" name="kilometers_number"
+                        id="kilometers_number" placeholder="Nombre total de kilomètres">
                 </div>
                 <div class="mb-3">
-                    <input type="number" step=0.01 class="form-control hidden" name="transport_expense"
+                    <input type="number" step=0.01 class="form-control" name="transport_expense"
                         id="transport_expense" placeholder="Montant total en euros">
                 </div>
                 <div class="mb-3">
-                    <input type="file" class="form-control hidden" name="transport_expense_file"
+                    <input type="file" class="form-control" name="transport_expense_file"
                         id="transport_expense_file">
                 </div>
                 <div class="mb-3">
                     <h5>Hébergement</h5>
+                    <input type="number" class="form-control" name="nights_number" id="nights_number"
+                        placeholder="Nombre de nuitées" required>
+                </div>
+                <div class="mb-3">  
                     <input type="number" step=0.01 class="form-control" name="accommodation_expense"
                         id="accommodation_expense" placeholder="Montant total en euros">
                 </div>

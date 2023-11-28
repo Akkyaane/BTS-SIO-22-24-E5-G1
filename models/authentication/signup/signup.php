@@ -20,11 +20,12 @@ if (!$db_connect) {
         } else {
             $hash = password_hash($password, PASSWORD_DEFAULT);
             $user[':p'] = $hash;
-            var_dump($user);
+            $db_connect->exec('SET FOREIGN_KEY_CHECKS = 0');
             $sql = 'INSERT INTO users (first_name, last_name, email, password, role) VALUES (:fn, :ln, :e, :p, :r)';
             $request = $db_connect->prepare($sql);
             $request->execute($user);
-            echo "Utilisateur ajouté.";
+            $db_connect->exec('SET FOREIGN_KEY_CHECKS = 1');
+            echo "L'utilisateur a bien été inscrit.";
         }
     } else {
         echo "Un problème est survenu. Veuillez recommencer.";
