@@ -72,17 +72,17 @@ if (!$db_connect) {
                     </select>
                 </div>
                 <div class="mb-3">
-                    <input type="number" step=0.01 class="form-control hidden" name="kilometers_expense"
+                    <input type="number" step=0.01 class="form-control" name="kilometers_expense"
                         id="kilometers_expense" placeholder="Nombre total de kilomètres"
                         value="<?php echo $data['kilometers_expense']; ?>" readonly>
                 </div>
                 <div class="mb-3">
-                    <input type="number" step=0.01 class="form-control hidden" name="transport_expense"
+                    <input type="number" step=0.01 class="form-control" name="transport_expense"
                         id="transport_expense" placeholder="Montant total en euros"
                         value="<?php echo $data['transport_expense']; ?>" readonly>
                 </div>
                 <div class="mb-3">
-                    <input type="file" class="form-control hidden" name="transport_expense_file"
+                    <input type="file" class="form-control" name="transport_expense_file"
                         id="transport_expense_file">
                 </div>
                 <div class="mb-3">
