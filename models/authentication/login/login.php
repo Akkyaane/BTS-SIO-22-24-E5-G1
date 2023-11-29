@@ -14,19 +14,18 @@ if (!$db_connect) {
         $request = $db_connect->prepare($sql);
         $request->bindParam(1, $email, PDO::PARAM_STR);
         $request->execute();
-        $row = $request->fetch(PDO::FETCH_ASSOC);
+        $data = $request->fetch(PDO::FETCH_ASSOC);
         if (empty($email) || empty($password)) {
             echo "Un ou plusieurs champs sont vides. Veuillez recommencer.";
             echo "<br><button><a href='../../../views/authentication/login/login.php'>Retour</a></button>";
-        } elseif ($email != $row['email']) {
+        } elseif ($email != $data['email']) {
             echo 'Aucun utilisateur trouvé avec cet adresse e-mail. Veuillez recommencer.';
             echo "<br><button><a href='../../../views/authentication/login/login.php'>Retour</a></button>";
-        } elseif (!password_verify($password, $row['password'])) {
+        } elseif (!password_verify($password, $data['password'])) {
             echo 'Le mot de passe est incorrect. Veuillez recommencer.';
             echo "<br><button><a href='../../../views/authentication/login/login.php'>Retour</a></button>";
         } else {
-            $_SESSION = ['id' => $row['id'], 'first_name' => $row['first_name'], 'last_name' => $row['last_name'], 'email' => $row['email'], 'role' => $row['role']];
-            var_dump($_SESSION);
+            $_SESSION = ['id' => $data['id'], 'first_name' => $data['first_name'], 'last_name' => $data['last_name'], 'email' => $data['email'], 'role' => $data['role']];
             header("Location: ../../../controllers/index.php");
         }
     } else {

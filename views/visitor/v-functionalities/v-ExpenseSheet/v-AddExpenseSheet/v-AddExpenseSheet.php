@@ -1,5 +1,7 @@
 <?php
+
 session_start();
+
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +43,8 @@ session_start();
                 <div class="mb-3">
                     <h3>Frais</h3>
                     <h5>Transport</h5>
-                    <select class="form-select" name="transport_category" id="transport_category">
+                    <select class="form-select" name="transport_category" id="transport_category"
+                        onchange="showDiv(this)">
                         <option selected hidden>Sélectionnez le type de transport</option>
                         <option value="1">Avion</option>
                         <option value="2">Train</option>
@@ -50,23 +53,23 @@ session_start();
                     </select>
                 </div>
                 <div class="mb-3">
-                    <input type="number" step=0.01 class="form-control" name="kilometers_number"
+                    <input type="number" step=0.01 class="form-control hidden" name="kilometers_number"
                         id="kilometers_number" placeholder="Nombre total de kilomètres">
                 </div>
                 <div class="mb-3">
-                    <input type="number" step=0.01 class="form-control" name="transport_expense"
+                    <input type="number" step=0.01 class="form-control hidden" name="transport_expense"
                         id="transport_expense" placeholder="Montant total en euros">
                 </div>
                 <div class="mb-3">
-                    <input type="file" class="form-control" name="transport_expense_file"
+                    <input type="file" class="form-control hidden" name="transport_expense_file"
                         id="transport_expense_file">
                 </div>
                 <div class="mb-3">
                     <h5>Hébergement</h5>
                     <input type="number" class="form-control" name="nights_number" id="nights_number"
-                        placeholder="Nombre de nuitées" required>
+                        placeholder="Nombre de nuitées">
                 </div>
-                <div class="mb-3">  
+                <div class="mb-3">
                     <input type="number" step=0.01 class="form-control" name="accommodation_expense"
                         id="accommodation_expense" placeholder="Montant total en euros">
                 </div>
@@ -97,7 +100,7 @@ session_start();
                     <script>charCount()</script>
                 </div>
                 <div class="mb-3">
-                    <button type="submit" class="btn btn-primary" name="submit">Envoyer</button>
+                    <button type="submit" class="btn btn-primary" name="submit" id="submit">Envoyer</button>
                 </div>
             </form>
         </div>
