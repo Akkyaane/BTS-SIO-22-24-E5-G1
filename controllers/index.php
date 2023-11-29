@@ -12,4 +12,5 @@ if (!$_SESSION) {
         header("Location: ../views/visitor/v-home/v-home.php");
     }
 }
+
 ?>

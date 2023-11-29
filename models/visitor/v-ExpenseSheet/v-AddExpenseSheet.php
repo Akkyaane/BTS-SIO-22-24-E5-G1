@@ -2,40 +2,40 @@
 
 session_start();
 include "../../db/db.php";
-include "../../../controllers/functions.php";
+include "../../functions.php";
 
-if (!$db_connect) {
+if (!$dbConnect) {
     echo "Connexion échouée.";
     echo "<br><button><a href='../../../views/visitor/v-functionalities/v-ExpenseSheet/v-AddExpenseSheet/v-AddExpenseSheet.php'>Retour</a></button>";
 } else {
     $target_dir = "../../../content/uploads/";
     if (isset($_POST['submit'])) {
-        $db_connect->exec('SET FOREIGN_KEY_CHECKS = 0');
+        $dbConnect->exec('SET FOREIGN_KEY_CHECKS = 0');
         $sql = 'SELECT MAX(id) AS max_id FROM receipts';
-        $request = $db_connect->prepare($sql);
+        $request = $dbConnect->prepare($sql);
         $request->execute();
         $data = $request->fetch(PDO::FETCH_ASSOC);
         $receiptsId = $data['max_id'];
-        if ($receiptsId == NULL) {
+        if ($receiptsId === NULL) {
             $receiptsId = 1;
         } else {
             $receiptsId++;
         }
         $expenseSheet = [];
         $receipts = [];
-        $expenseSheet = [':ui' => $_SESSION['id'], ':ri' => $receiptsId, ':sd' => $_POST['start_date'], ':ed' => $_POST['end_date'], ':rd' => $_POST['request_date']];
+        $expenseSheet = [':ui' => $_SESSION['id'], ':ri' => $receiptsId, ':rd' => $_POST['request_date'], ':sd' => $_POST['start_date'], ':ed' => $_POST['end_date']];
         if (!empty($_POST['transport_category'])) {
             $expenseSheet[':tc'] = $_POST['transport_category'];
             if ($expenseSheet[':tc'] != 4) {
                 if (!empty($_POST['transport_expense'])) {
                     $expenseSheet[':te'] = $_POST['transport_expense'];
-                    $expenseSheet[':kn'] = NULL;
                     if (!empty($_FILES['transport_expense_file']['name'])) {
                         $receipts[':tef'] = $target_dir . 'transport_expense_' . $receiptsId . '_' . uniqid() . basename($_FILES["transport_expense_file"]["name"]);
                     } else {
                         echo "Vous avez sélectionné un mode de transport mais n'avez pas fourni de justificatif. Veuillez recommencer.";
                         echo "<br><button><a href='../../../views/visitor/v-functionalities/v-ExpenseSheet/v-AddExpenseSheet/v-AddExpenseSheet.php'>Retour</a></button>";
                     }
+                    $expenseSheet[':kn'] = NULL;
                 } else {
                     echo "Vous avez sélectionné un mode de transport mais n'avez pas saisi de montant. Veuillez recommencer.";
                     echo "<br><button><a href='../../../views/visitor/v-functionalities/v-ExpenseSheet/v-AddExpenseSheet/v-AddExpenseSheet.php'>Retour</a></button>";
@@ -68,8 +68,8 @@ if (!$db_connect) {
                 echo "<br><button><a href='../../../views/visitor/v-functionalities/v-ExpenseSheet/v-AddExpenseSheet/v-AddExpenseSheet.php'>Retour</a></button>";
             }
         } else {
-            $expenseSheet[':ae'] = NULL;
             $expenseSheet[':nn'] = NULL;
+            $expenseSheet[':ae'] = NULL;
             $receipts[':aef'] = NULL;
         }
         if (!empty($_POST['food_expense'])) {
@@ -101,12 +101,12 @@ if (!$db_connect) {
             }
         } else {
             $expenseSheet[':oe'] = NULL;
-            $expenseSheet[':m'] = NULL;
             $receipts[':oef'] = NULL;
+            $expenseSheet[':m'] = NULL;
         }
         if (!empty($receipts[':tef'])) {
             $fileToUpload = $_FILES['transport_expense_file']['tmp_name'];
-            if (upload_files($receipts[':tef'], $fileToUpload) == false) {
+            if (upload_files($receipts[':tef'], $fileToUpload) === false) {
                 $uploadOk = false;
             } else {
                 $uploadOk = true;
@@ -114,7 +114,7 @@ if (!$db_connect) {
         }
         if (!empty($receipts[':aef'])) {
             $fileToUpload = $_FILES['accommodation_expense_file']['tmp_name'];
-            if (upload_files($receipts[':aef'], $fileToUpload) == false) {
+            if (upload_files($receipts[':aef'], $fileToUpload) === false) {
                 $uploadOk = false;
             } else {
                 $uploadOk = true;
@@ -122,7 +122,7 @@ if (!$db_connect) {
         }
         if (!empty($receipts[':fef'])) {
             $fileToUpload = $_FILES['food_expense_file']['tmp_name'];
-            if (upload_files($receipts[':fef'], $fileToUpload) == false) {
+            if (upload_files($receipts[':fef'], $fileToUpload) === false) {
                 $uploadOk = false;
             } else {
                 $uploadOk = true;
@@ -130,7 +130,7 @@ if (!$db_connect) {
         }
         if (!empty($receipts[':oef'])) {
             $fileToUpload = $_FILES['other_expense_file']['tmp_name'];
-            if (upload_files($receipts[':oef'], $fileToUpload) == false) {
+            if (upload_files($receipts[':oef'], $fileToUpload) === false) {
                 $uploadOk = false;
             } else {
                 $uploadOk = true;
@@ -139,19 +139,19 @@ if (!$db_connect) {
         if (empty($expenseSheet[':kn']) && empty($expenseSheet[':te']) && empty($expenseSheet[':nn']) && empty($expenseSheet[':ae']) && empty($expenseSheet[':fe']) && empty($expenseSheet[':oe'])) {
             echo "Aucun montant n'a été saisi. Veuillez recommencer.";
             echo "<br><button><a href='../../../views/visitor/v-functionalities/v-ExpenseSheet/v-AddExpenseSheet/v-AddExpenseSheet.php'>Retour</a></button>";
-        } else if ($uploadOk == false) {
-            echo "Un problème est survenu lors du téléchargement des fichiers. Veuillez recommencer.";
-            echo "<br><button><a href='../../../views/visitor/v-functionalities/v-ExpenseSheet/v-AddExpenseSheet/v-AddExpenseSheet.php'>Retour</a></button>";
+        } else if (!(empty($uploadOk))) {
+            if ($uploadOk === false) {
+                echo "Un problème est survenu lors du téléchargement des fichiers. Veuillez recommencer.";
+                echo "<br><button><a href='../../../views/visitor/v-functionalities/v-ExpenseSheet/v-AddExpenseSheet/v-AddExpenseSheet.php'>Retour</a></button>";
+            }
         } else {
-            $sql = 'INSERT INTO expenseSheets (user_id, receipts_id, start_date, end_date, request_date, transport_category, kilometers_number, transport_expense, nights_number, accommodation_expense, food_expense, other_expense, message) VALUES (:ui, :ri, :sd, :ed, :rd, :tc, :kn, :te, :nn, :ae, :fe, :oe, :m)';
-            $request = $db_connect->prepare($sql);
+            $sql = 'INSERT INTO expensesheets (user_id, receipts_id, request_date, start_date, end_date, transport_category, kilometers_number, transport_expense, nights_number, accommodation_expense, food_expense, other_expense, message) VALUES (:ui, :ri, :rd, :sd, :ed, :tc, :kn, :te, :nn, :ae, :fe, :oe, :m)';
+            $request = $dbConnect->prepare($sql);
             $request->execute($expenseSheet);
-
             $sql = 'INSERT INTO receipts (transport_expense, accommodation_expense, food_expense, other_expense) VALUES (:tef, :aef, :fef, :oef)';
-            $request = $db_connect->prepare($sql);
+            $request = $dbConnect->prepare($sql);
             $request->execute($receipts);
-            
-            $db_connect->exec('SET FOREIGN_KEY_CHECKS = 1');
+            $dbConnect->exec('SET FOREIGN_KEY_CHECKS = 1');
             echo "La fiche de frais a été soumise pour traitement.";
             echo "<br><br><button><a href='../../../views/visitor/v-home/v-home.php'>Retour</a></button>";
         }
@@ -160,5 +160,3 @@ if (!$db_connect) {
         echo "<br><button><a href='../../../views/visitor/v-functionalities/v-ExpenseSheet/v-AddExpenseSheet/v-AddExpenseSheet.php'>Retour</a></button>";
     }
 }
-
-?>

@@ -3,31 +3,25 @@
 session_start();
 include "../../../../models/db/db.php";
 
-if (!$db_connect) {
+if (!$dbConnect) {
     echo "Connexion échouée.";
+    echo "<br><button><a href='../../v-home/v-home.php'>Retour</a></button>";
 } else {
-    $id = $_GET['readid'];
-    $sql = "SELECT * FROM expenseSheets WHERE id = ?";
-    $request = $db_connect->prepare($sql);
-    $request->bindParam(1, $id, PDO::PARAM_INT);
-    $request->execute();
-    $data = $request->fetch(PDO::FETCH_ASSOC);
-
-    $sql = 'SELECT * FROM expenseSheets where id = ?';
-    $expense_sheets_data_request = $db_connect->prepare($sql);
-    $expense_sheets_data_request->bindParam(1, $id, PDO::PARAM_INT);
+    $sql = 'SELECT * FROM expensesheets where id = ?';
+    $expense_sheets_data_request = $dbConnect->prepare($sql);
+    $expense_sheets_data_request->bindParam(1, $_GET['readid'], PDO::PARAM_INT);
     $expense_sheets_data_request->execute();
     $expense_sheets_data = $expense_sheets_data_request->fetch(PDO::FETCH_ASSOC);
     if ($expense_sheets_data) {
         $sql = 'SELECT * FROM receipts where id = ?';
-        $receipts_data_request = $db_connect->prepare($sql);
+        $receipts_data_request = $dbConnect->prepare($sql);
         $receipts_data_request->bindParam(1, $expense_sheets_data['id'], PDO::PARAM_INT);
         $receipts_data_request->execute();
         $receipts_data = $receipts_data_request->fetch(PDO::FETCH_ASSOC);
     }
     if ($expense_sheets_data) {
         $sql = 'SELECT * FROM treatment where expense_sheet_id = ?';
-        $treatment_data_request = $db_connect->prepare($sql);
+        $treatment_data_request = $dbConnect->prepare($sql);
         $treatment_data_request->bindParam(1, $expense_sheets_data['id'], PDO::PARAM_INT);
         $treatment_data_request->execute();
         $treatment_data = $treatment_data_request->fetch(PDO::FETCH_ASSOC);
@@ -43,9 +37,7 @@ if (!$db_connect) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GSB - Consultation d'une fiche de frais</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="v-AddExpenseSheet/v-AddExpenseSheet.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 
 <body>
@@ -53,30 +45,30 @@ if (!$db_connect) {
         <h1 class="text-center">Consulter une fiche de frais</h1>
     </header>
     <main>
-        <div class="container mt-5">
-            <div class="mb-3">
+        <div class="container mt-4">
+            <div class="mt-3">
                 <h3>Informations générales</h3>
+                <p>Demande effectuée le :
+                    <?php echo $expense_sheets_data['request_date']; ?>
+                </p>
                 <p>Date de départ :
                     <?php echo $expense_sheets_data['start_date']; ?>
                 </p>
                 <p>Date de retour :
                     <?php echo $expense_sheets_data['end_date']; ?>
                 </p>
-                <p>Demande effectuée le :
-                    <?php echo $expense_sheets_data['request_date']; ?>
-                </p>
             </div>
-            <div class="mb-3">
+            <div class="mt-3">
                 <h3>Frais</h3>
                 <h4>Transport</h4>
                 <p>Type de transport :
-                    <?php if ($expense_sheets_data['transport_category'] == '1') {
+                    <?php if ($expense_sheets_data['transport_category'] === '1') {
                         echo "Avion";
-                    } else if ($expense_sheets_data['transport_category'] == '2') {
+                    } else if ($expense_sheets_data['transport_category'] === '2') {
                         echo "Train";
-                    } else if ($expense_sheets_data['transport_category'] == '3') {
+                    } else if ($expense_sheets_data['transport_category'] === '3') {
                         echo "Bus/Car/Taxi";
-                    } else if ($expense_sheets_data['transport_category'] == '4') {
+                    } else if ($expense_sheets_data['transport_category'] === '4') {
                         echo "Voiture";
                     } else {
                         echo "N/A";
@@ -104,10 +96,14 @@ if (!$db_connect) {
                     } ?>
                 </p>
             </div>
-            <div class="mb-3">
+            <div class="mt-3">
                 <h4>Hébergement</h4>
                 <p>Nombre de nuitées :
-                    <?php echo $expense_sheets_data['nights_number']; ?>
+                    <?php if (!(empty($expense_sheets_data['nights_number']))) {
+                        echo $expense_sheets_data['nights_number'];
+                    } else {
+                        echo "N/A";
+                    } ?>
                 </p>
                 <p>Montal total en euros :
                     <?php if (!(empty($expense_sheets_data['accommodation_expense']))) {
@@ -124,7 +120,7 @@ if (!$db_connect) {
                     } ?>
                 </p>
             </div>
-            <div class="mb-3">
+            <div class="mt-3">
                 <h4>Alimentation</h4>
                 <p>Montal total en euros :
                     <?php if (!(empty($expense_sheets_data['food_expense']))) {
@@ -141,7 +137,7 @@ if (!$db_connect) {
                     } ?>
                 </p>
             </div>
-            <div class="mb-3">
+            <div class="mt-3">
                 <h4>Autres</h4>
                 <p>Montant total en euros :
                     <?php if (!(empty($expense_sheets_data['other_expense']))) {
@@ -165,23 +161,21 @@ if (!$db_connect) {
                     } ?>
                 </p>
             </div>
-            <div class="mb-3">
+            <div class="mt-3">
                 <h3>Traitement</h3>
                 <p>Statut :
-                    <?php 
-                        if (!(empty($treatment_data['status']))) { 
-                            if ($treatment_data['status'] === 0) {
-                                $status = "Refusée";
-                            } else if ($treatment_data['status'] === 1) {
-                                $status = "Validée";
-                            }
-                            else if ($treatment_data['status'] === null) {
-                                echo "En attente de traitement";
-                            }
-
-                        } else {
+                    <?php
+                    if (!(empty($treatment_data['status']))) {
+                        if ($treatment_data['status'] === 0) {
+                            $status = "Refusée";
+                        } else if ($treatment_data['status'] === 1) {
+                            $status = "Validée";
+                        } else if ($treatment_data['status'] === null) {
                             echo "En attente de traitement";
-                        } ?>
+                        }
+                    } else {
+                        echo "En attente de traitement";
+                    } ?>
                 </p>
                 <p>Détails du refus :
                     <?php if (!(empty($treatment_data['remark']))) {
@@ -191,9 +185,8 @@ if (!$db_connect) {
                     } ?>
                 </p>
             </div>
-            <div class="mb-3">
-                <button class="btn btn-primary"><a href="../../v-home/v-home.php"
-                        style="color: white">Retour</a></button>
+            <div class="mt-3">
+                <button class="btn btn-primary"><a href="../../v-home/v-home.php" style="color: white; text-decoration: none">Retour</a></button>
             </div>
         </div>
     </main>
