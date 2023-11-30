@@ -3,32 +3,27 @@
 session_start();
 include "../../db/db.php";
 
-if (!$db_connect) {
+if (!$dbConnect) {
     echo "Connexion échouée.";
     echo "<br><button><a href='../../../views/authentication/login/login.php'>Retour</a></button>";
 } else {
     if (isset($_POST['submit'])) {
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-        $sql = "SELECT * FROM users WHERE email = ?";
-        $request = $db_connect->prepare($sql);
-        $request->bindParam(1, $email, PDO::PARAM_STR);
+        $sql = 'SELECT * FROM users WHERE email = ?';
+        $request = $dbConnect->prepare($sql);
+        $request->bindParam(1, $_POST['email'], PDO::PARAM_STR);
         $request->execute();
-        $row = $request->fetch(PDO::FETCH_ASSOC);
-        if (empty($email) || empty($password)) {
+        $data = $request->fetch(PDO::FETCH_ASSOC);
+        if (empty($_POST['email']) || empty($_POST['password'])) {
             echo "Un ou plusieurs champs sont vides. Veuillez recommencer.";
             echo "<br><button><a href='../../../views/authentication/login/login.php'>Retour</a></button>";
-        } elseif ($email != $row['email']) {
+        } elseif ($_POST['email'] != $data['email']) {
             echo 'Aucun utilisateur trouvé avec cet adresse e-mail. Veuillez recommencer.';
             echo "<br><button><a href='../../../views/authentication/login/login.php'>Retour</a></button>";
-        } elseif (!password_verify($password, $row['password'])) {
+        } elseif (!password_verify($_POST['password'], $data['password'])) {
             echo 'Le mot de passe est incorrect. Veuillez recommencer.';
             echo "<br><button><a href='../../../views/authentication/login/login.php'>Retour</a></button>";
         } else {
-            $_SESSION['first_name'] = $row['first_name'];
-            $_SESSION['last_name'] = $row['last_name'];
-            $_SESSION['email'] = $row['email'];
-            $_SESSION['role'] = $row['role'];
+            $_SESSION = ['id' => $data['id'], 'first_name' => $data['first_name'], 'last_name' => $data['last_name'], 'email' => $data['email'], 'role' => $data['role']];
             header("Location: ../../../controllers/index.php");
         }
     } else {

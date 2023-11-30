@@ -3,15 +3,29 @@
 session_start();
 include "../../../../models/db/db.php";
 
-if (!$db_connect) {
+if (!$dbConnect) {
     echo "Connexion échouée.";
+    echo "<br><button><a href='../../v-home/v-home.php'>Retour</a></button>";
 } else {
-    $id = $_GET['readid'];
-    $sql = "SELECT * FROM expenseSheets WHERE id = ?";
-    $result = $db_connect->prepare($sql);
-    $result->bindParam(1, $id, PDO::PARAM_INT);
-    $result->execute();
-    $data = $result->fetch(PDO::FETCH_ASSOC);
+    $sql = 'SELECT * FROM expensesheets where id = ?';
+    $expense_sheets_data_request = $dbConnect->prepare($sql);
+    $expense_sheets_data_request->bindParam(1, $_GET['readid'], PDO::PARAM_INT);
+    $expense_sheets_data_request->execute();
+    $expense_sheets_data = $expense_sheets_data_request->fetch(PDO::FETCH_ASSOC);
+    if ($expense_sheets_data) {
+        $sql = 'SELECT * FROM receipts where id = ?';
+        $receipts_data_request = $dbConnect->prepare($sql);
+        $receipts_data_request->bindParam(1, $expense_sheets_data['id'], PDO::PARAM_INT);
+        $receipts_data_request->execute();
+        $receipts_data = $receipts_data_request->fetch(PDO::FETCH_ASSOC);
+    }
+    if ($expense_sheets_data) {
+        $sql = 'SELECT * FROM treatment where expense_sheet_id = ?';
+        $treatment_data_request = $dbConnect->prepare($sql);
+        $treatment_data_request->bindParam(1, $expense_sheets_data['id'], PDO::PARAM_INT);
+        $treatment_data_request->execute();
+        $treatment_data = $treatment_data_request->fetch(PDO::FETCH_ASSOC);
+    }
 }
 
 ?>
@@ -23,10 +37,7 @@ if (!$db_connect) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GSB - Consultation d'une fiche de frais</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="v-AddExpenseSheet/v-AddExpenseSheet.css">
-    <script src="../../../script.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 
 <body>
@@ -72,17 +83,17 @@ if (!$db_connect) {
                     </select>
                 </div>
                 <div class="mb-3">
-                    <input type="number" step=0.01 class="form-control" name="kilometers_expense"
+                    <input type="number" step=0.01 class="form-control hidden" name="kilometers_expense"
                         id="kilometers_expense" placeholder="Nombre total de kilomètres"
                         value="<?php echo $data['kilometers_expense']; ?>" readonly>
                 </div>
                 <div class="mb-3">
-                    <input type="number" step=0.01 class="form-control" name="transport_expense"
+                    <input type="number" step=0.01 class="form-control hidden" name="transport_expense"
                         id="transport_expense" placeholder="Montant total en euros"
                         value="<?php echo $data['transport_expense']; ?>" readonly>
                 </div>
                 <div class="mb-3">
-                    <input type="file" class="form-control" name="transport_expense_file"
+                    <input type="file" class="form-control hidden" name="transport_expense_file"
                         id="transport_expense_file">
                 </div>
                 <div class="mb-3">
