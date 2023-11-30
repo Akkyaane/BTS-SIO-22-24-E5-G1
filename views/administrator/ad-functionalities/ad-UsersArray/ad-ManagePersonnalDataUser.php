@@ -81,8 +81,7 @@ if (!$db_connect) {
         <button type="submit" class="btn btn-primary" name="edit_submit">
           Modifier
         </button>
-        <button type="submit" class="btn btn-danger" name="disable_submit">
-          Désactiver
+        <button type="submit" class="btn btn-danger" name="disable_submit"><a href="../../../../models/administrator/ad-UsersArray/ad-BlockUser.php?updateid=<?php echo $id; ?>">Désactiver</a>
         </button>
         </div>
       </form>
