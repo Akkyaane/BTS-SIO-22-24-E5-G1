@@ -140,35 +140,39 @@ if (!$dbConnect) {
         if (empty($expenseSheet[':kn']) && empty($expenseSheet[':te']) && empty($expenseSheet[':nn']) && empty($expenseSheet[':ae']) && empty($expenseSheet[':fe']) && empty($expenseSheet[':oe'])) {
             echo "Aucun montant n'a été saisi. Veuillez recommencer.";
             echo "<br><button><a href='../../../views/visitor/v-functionalities/v-ExpenseSheet/v-UpdateExpenseSheet.php'>Retour</a></button>";
-        } else if (!(empty($uploadOk))) {
+        }
+        if (!(empty($uploadOk))) {
             if ($uploadOk === false) {
                 echo "Un problème est survenu lors du téléchargement des fichiers. Veuillez recommencer.";
                 echo "<br><button><a href='../../../views/visitor/v-functionalities/v-ExpenseSheet/v-AddExpenseSheet/v-AddExpenseSheet.php'>Retour</a></button>";
+            } else {
+                $sql = 'UPDATE expensesheets SET user_id=:ui, receipts_id=:ri, request_date=:rd, start_date=:sd, end_date=:ed, transport_category=:tc, kilometers_number=:kn, transport_expense=:te, nights_number=:nn, accommodation_expense=:ae, food_expense=:fe, other_expense=:oe, message=:m WHERE id=:id';
+                $request = $dbConnect->prepare($sql);
+                $request->bindParam(':ui', $expenseSheet[':ui']);
+                $request->bindParam(':ri', $expenseSheet[':ri']);
+                $request->bindParam(':rd', $expenseSheet[':rd']);
+                $request->bindParam(':sd', $expenseSheet[':sd']);
+                $request->bindParam(':ed', $expenseSheet[':ed']);
+                $request->bindParam(':tc', $expenseSheet[':tc']);
+                $request->bindParam(':kn', $expenseSheet[':kn']);
+                $request->bindParam(':te', $expenseSheet[':te']);
+                $request->bindParam(':nn', $expenseSheet[':nn']);
+                $request->bindParam(':ae', $expenseSheet[':ae']);
+                $request->bindParam(':fe', $expenseSheet[':fe']);
+                $request->bindParam(':oe', $expenseSheet[':oe']);
+                $request->bindParam(':m', $expenseSheet[':m']);
+                $request->bindParam(':id', $id);
+                $request->execute();
+                $sql = 'INSERT INTO receipts (transport_expense, accommodation_expense, food_expense, other_expense) VALUES (:tef, :aef, :fef, :oef)';
+                $request = $dbConnect->prepare($sql);
+                $request->execute($receipts);
+                $dbConnect->exec('SET FOREIGN_KEY_CHECKS = 1');
+                echo "La fiche de frais a été modifiée.";
+                echo "<br><br><button><a href='../../../views/visitor/v-home/v-home.php'>Retour</a></button>";
             }
         } else {
-            $sql = 'UPDATE expensesheets SET user_id=:ui, receipts_id=:ri, request_date=:rd, start_date=:sd, end_date=:ed, transport_category=:tc, kilometers_number=:kn, transport_expense=:te, nights_number=:nn, accommodation_expense=:ae, food_expense=:fe, other_expense=:oe, message=:m WHERE id=:id';
-            $request = $dbConnect->prepare($sql);
-            $request->bindParam(':ui', $expenseSheet[':ui']);
-            $request->bindParam(':ri', $expenseSheet[':ri']);
-            $request->bindParam(':rd', $expenseSheet[':rd']);
-            $request->bindParam(':sd', $expenseSheet[':sd']);
-            $request->bindParam(':ed', $expenseSheet[':ed']);
-            $request->bindParam(':tc', $expenseSheet[':tc']);
-            $request->bindParam(':kn', $expenseSheet[':kn']);
-            $request->bindParam(':te', $expenseSheet[':te']);
-            $request->bindParam(':nn', $expenseSheet[':nn']);
-            $request->bindParam(':ae', $expenseSheet[':ae']);
-            $request->bindParam(':fe', $expenseSheet[':fe']);
-            $request->bindParam(':oe', $expenseSheet[':oe']);
-            $request->bindParam(':m', $expenseSheet[':m']);
-            $request->bindParam(':id', $id);
-            $request->execute();
-            $sql = 'INSERT INTO receipts (transport_expense, accommodation_expense, food_expense, other_expense) VALUES (:tef, :aef, :fef, :oef)';
-            $request = $dbConnect->prepare($sql);
-            $request->execute($receipts);
-            $dbConnect->exec('SET FOREIGN_KEY_CHECKS = 1');
-            echo "La fiche de frais a été modifiée.";
-            echo "<br><br><button><a href='../../../views/visitor/v-home/v-home.php'>Retour</a></button>";
+            echo "Un problème est survenu. Veuillez recommencer.";
+            echo "<br><button><a href='../../../views/visitor/v-functionalities/v-ExpenseSheet/v-UpdateExpenseSheet.php?updateid='.$id.'>Retour</a></button>";
         }
     } else {
         echo "Un problème est survenu. Veuillez recommencer.";

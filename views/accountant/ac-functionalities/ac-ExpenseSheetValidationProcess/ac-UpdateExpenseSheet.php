@@ -3,26 +3,25 @@
 session_start();
 include "../../../../models/db/db.php";
 
-if (!$db_connect) {
+if (!$dbConnect) {
     echo "Connexion échouée.";
 } else {
-    $id = $_GET['updateid'];
     $sql = 'SELECT * FROM expenseSheets where id = ?';
-    $expense_sheets_data_request = $db_connect->prepare($sql);
-    $expense_sheets_data_request->bindParam(1, $id, PDO::PARAM_INT);
+    $expense_sheets_data_request = $dbConnect->prepare($sql);
+    $expense_sheets_data_request->bindParam(1, $_GET['updateid'], PDO::PARAM_INT);
     $expense_sheets_data_request->execute();
     $expense_sheets_data = $expense_sheets_data_request->fetch(PDO::FETCH_ASSOC);
     if ($expense_sheets_data) {
-        $sql = 'SELECT * FROM receipts where id = ?';
-        $receipts_data_request = $db_connect->prepare($sql);
-        $receipts_data_request->bindParam(1, $expense_sheets_data['id'], PDO::PARAM_INT);
+        $sql = 'SELECT e.*, r.* FROM expensesheets e INNER JOIN receipts r ON e.receipts_id = r.id where e.id = ?';
+        $receipts_data_request = $dbConnect->prepare($sql);
+        $receipts_data_request->bindParam(1, $_GET['updateid'], PDO::PARAM_INT);
         $receipts_data_request->execute();
         $receipts_data = $receipts_data_request->fetch(PDO::FETCH_ASSOC);
     }
     if ($expense_sheets_data) {
         $sql = 'SELECT * FROM treatment where expense_sheet_id = ?';
-        $treatment_data_request = $db_connect->prepare($sql);
-        $treatment_data_request->bindParam(1, $expense_sheets_data['id'], PDO::PARAM_INT);
+        $treatment_data_request = $dbConnect->prepare($sql);
+        $treatment_data_request->bindParam(1, $_GET['updateid'], PDO::PARAM_INT);
         $treatment_data_request->execute();
         $treatment_data = $treatment_data_request->fetch(PDO::FETCH_ASSOC);
     }
@@ -47,8 +46,8 @@ if (!$db_connect) {
         <h1 class="text-center">Valider une fiche de frais</h1>
     </header>
     <main>
-        <div class="container mt-5">
-            <div class="mb-3">
+        <div class="container mt-4">
+            <div class="mt-3">
                 <h3>Informations générales</h3>
                 <p>Date de départ :
                     <?php echo $expense_sheets_data['start_date']; ?>
@@ -60,7 +59,7 @@ if (!$db_connect) {
                     <?php echo $expense_sheets_data['request_date']; ?>
                 </p>
             </div>
-            <div class="mb-3">
+            <div class="mt-3">
                 <h3>Frais</h3>
                 <h4>Transport</h4>
                 <p>Type de transport :
@@ -98,10 +97,14 @@ if (!$db_connect) {
                     } ?>
                 </p>
             </div>
-            <div class="mb-3">
+            <div class="mt-3">
                 <h4>Hébergement</h4>
                 <p>Nombre de nuitées :
-                    <?php echo $expense_sheets_data['nights_number']; ?>
+                    <?php if (!(empty($expense_sheets_data['nights_number']))) {
+                        echo "<a href=../" . $expense_sheets_data['nights_number'] . ">Consulter</a>";
+                    } else {
+                        echo "N/A";
+                    } ?>
                 </p>
                 <p>Montal total en euros :
                     <?php if (!(empty($expense_sheets_data['accommodation_expense']))) {
@@ -118,7 +121,7 @@ if (!$db_connect) {
                     } ?>
                 </p>
             </div>
-            <div class="mb-3">
+            <div class="mt-3">
                 <h4>Alimentation</h4>
                 <p>Montal total en euros :
                     <?php if (!(empty($expense_sheets_data['food_expense']))) {
@@ -135,7 +138,7 @@ if (!$db_connect) {
                     } ?>
                 </p>
             </div>
-            <div class="mb-3">
+            <div class="mt-3">
                 <h4>Autres</h4>
                 <p>Montant total en euros :
                     <?php if (!(empty($expense_sheets_data['other_expense']))) {
@@ -159,16 +162,16 @@ if (!$db_connect) {
                     } ?>
                 </p>
             </div>
-            <form action="../../../../models/accountant/ac-ExpenseSheetValidationProcess/ac-UpdateExpenseSheet.php?updateid=<?php echo $id; ?>" method="post">
-                <div class="mb-3">
+            <form action="../../../../models/accountant/ac-ExpenseSheetValidationProcess/ac-UpdateExpenseSheet.php?updateid=<?php echo $_GET['updateid']; ?>" method="post">
+                <div class="mt-3">
                     <h5>Détails du refus</h5>
-                    <div class="mb-3">
+                    <div class="mt-3">
                         <textarea class="form-control" rows="3" name="remark" id="remark" placeholder="Écrire une remarque..." maxlength="500"></textarea>
                         <div id="charCount">0/500</div>
                         <script>charCount()</script>
                     </div>
                 </div>
-                <div class="mb-3">
+                <div class="mt-3">
                     <button type="submit" class="btn btn-primary" name="validate_submit">Valider</button>
                     <button type="submit" class="btn btn-sm btn-danger" name="disprove_submit">Refuser</button>
                     <button class="btn btn-primary"><a href="../../ac-home/ac-home.php"

@@ -19,7 +19,7 @@ include "../../../models/db/db.php";
   <header class="bg-primary text-white text-center p-4">
     <h1>Portail GSB</h1>
     <h4>Visiteur médical</h4>
-    <div class="container mt-3">
+    <div class="container mt-4">
       <nav class="navbar" style="background : #0d6efd; border: solid white; justify-content: center">
         <ul class="nav">
           <li class="nav-item"><a class="nav-link" href="../v-functionalities/v-PersonnalData/v-UpdatePersonnalData.php" style="color: white">Mon
@@ -38,7 +38,7 @@ include "../../../models/db/db.php";
       </h3>
     </div>
 
-    <div class="container mt-3">
+    <div class="container mt-5">
       <table class="table">
         <thead>
           <tr>
