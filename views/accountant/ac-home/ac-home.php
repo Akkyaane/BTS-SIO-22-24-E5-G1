@@ -101,7 +101,7 @@ if (!$dbConnect) {
                                 <td>
                                   <button class="btn btn-sm btn-primary"><a href="../ac-functionalities/ac-ExpenseSheetValidationProcess/ac-ReadExpenseSheet.php?readid=' . $id . '" style="color: white">Consulter</a></button>
                                 </td>';
-                    } else if ($row['status'] === null) {
+                    } else {
                         echo 'En traitement
                                 </td>
                                 <td>
@@ -113,7 +113,7 @@ if (!$dbConnect) {
         }
     } else {
         echo '<tr>
-                <td colspan="7">Aucun résultat</td>
+                <td>Aucun résultat</td>
             </tr>';
     };
 };

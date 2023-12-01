@@ -65,7 +65,7 @@ include "../../../models/db/db.php";
                 foreach ($array as $row) {
                   echo '<tr>
                               <td>Du ' . '<strong>' . $row['start_date'] . '</strong>' . ' au ' . '<strong>' . $row['end_date'] . '</strong></td>';
-                  if ($row['nights_number'] === NULL) {
+                  if ($row['nights_number'] == NULL) {
                     $row['nights_number'] = 0;
                     echo '<td>' . $row['nights_number'] . '</td>';
                   } else {
@@ -75,25 +75,18 @@ include "../../../models/db/db.php";
                               <td>Indisponible</td>
                               <td>' . $row['request_date'] . '</td>';
                   if (!(empty($row['status']))) {
-                    if ($row['status'] === 1) {
-                      $row['status'] = "Validée";
+                    if ($row['status'] == 1) {
                       echo '
+                                  <td>Validée</td>
                                   <td>
                                   <button class="btn btn-sm btn-primary"><a href="../v-functionalities/v-ExpenseSheet/v-ReadExpenseSheet.php?readid=' . $row['1'] . '"style="color: white; text-decoration: none">Consulter</a></button>
                                   </td>';
-                    } else if ($row['status'] === 0) {
-                      $row['status'] = "Refusée";
-                      echo '
+                    } 
+                    if ($row['status'] == 2) {
+                      echo '        
+                                  <td>Refusée</td>
                                   <td>
                                   <button class="btn btn-sm btn-primary"><a href="../v-functionalities/v-ExpenseSheet/v-ReadExpenseSheet.php?readid=' . $row['1'] . '"style="color: white; text-decoration: none">Consulter</a></button>
-                                  </td>';
-                    } else {
-                      $row['status'] = "En traitement";
-                      echo '
-                                  <td>
-                                  <button class="btn btn-sm btn-primary"><a href="../v-functionalities/v-ExpenseSheet/v-ReadExpenseSheet.php?readid=' . $row['1'] . '"style="color: white; text-decoration: none">Consulter</a></button>
-                                  <button class="btn btn-sm btn-primary"><a href="../v-functionalities/v-ExpenseSheet/v-UpdateExpenseSheet.php?updateid=' . $row['1'] . '"style="color: white; text-decoration: none">Modifier</a></button>
-                                  <button class="btn btn-sm btn-danger"><a href="../../../models/visitor/v-ExpenseSheet/v-DeleteExpenseSheet.php?deleteid=' . $row['1'] . '"style="color: white; text-decoration: none">Supprimer</a></button>
                                   </td>';
                     }
                   } else {
@@ -116,7 +109,7 @@ include "../../../models/db/db.php";
                   foreach ($array as $row) {
                     echo '<tr>
                     <td>Du' . $row['start_date'] . '</strong>' . ' au ' . '<strong>' . $row['end_date'] . '</strong></td>' . '</td>';
-                    if ($row['nights_number'] === NULL) {
+                    if ($row['nights_number'] == NULL) {
                       $row['nights_number'] = 0;
                       echo '<td>' . $row['nights_number'] . '</td>';
                     } else {
@@ -126,27 +119,28 @@ include "../../../models/db/db.php";
                               <td>Indisponible</td>
                               <td>' . $row['request_date'] . '</td>';
                     if (!(empty($row['status']))) {
-                      if ($row['status'] === 1) {
-                        $row['status'] = "Validée";
+                      if ($row['status'] == 1) {
                         echo '
+                                  <td>Validée</td>
                                   <td>
                                   <button class="btn btn-sm btn-primary"><a href="../v-functionalities/v-ExpenseSheet/v-ReadExpenseSheet.php?readid=' . $row['1'] . '"style="color: white; text-decoration: none">Consulter</a></button>
                                   </td>';
-                      } else if ($row['status'] === 0) {
-                        $row['status'] = "Refusée";
+                      }
+                      if ($row['status'] == 2) {
                         echo '
+                                  <td>Refusée</td>
                                   <td>
                                   <button class="btn btn-sm btn-primary"><a href="../v-functionalities/v-ExpenseSheet/v-ReadExpenseSheet.php?readid=' . $row['1'] . '"style="color: white; text-decoration: none">Consulter</a></button>
                                   </td>';
-                      } else {
-                        $row['status'] = "En traitement";
+                      } 
+                    } else {
+                        echo "En traitement";
                         echo '
                                   <td>
                                   <button class="btn btn-sm btn-primary"><a href="../v-functionalities/v-ExpenseSheet/v-ReadExpenseSheet.php?readid=' . $row['1'] . '"style="color: white; text-decoration: none">Consulter</a></button>
                                   <button class="btn btn-sm btn-primary"><a href="../v-functionalities/v-ExpenseSheet/v-UpdateExpenseSheet.php?updateid=' . $row['1'] . '"style="color: white; text-decoration: none">Modifier</a></button>
                                   <button class="btn btn-sm btn-danger"><a href="../../../models/visitor/v-ExpenseSheet/v-DeleteExpenseSheet.php?deleteid=' . $row['1'] . '"style="color: white; text-decoration: none">Supprimer</a></button>
                                   </td>';
-                      }
                     }
                   }
                 }

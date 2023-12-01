@@ -167,11 +167,10 @@ if (!$dbConnect) {
                     <?php
                     if (!(empty($treatment_data['status']))) {
                         if ($treatment_data['status'] == 2) {
-                            $status = "Refusée";
-                        } else if ($treatment_data['status'] == 1) {
-                            $status = "Validée";
-                        } else if ($treatment_data['status'] == null) {
-                            echo "En attente de traitement";
+                            echo "Refusée";
+                        }
+                        if ($treatment_data['status'] == 1) {
+                            echo "Validée";
                         }
                     } else {
                         echo "En attente de traitement";
