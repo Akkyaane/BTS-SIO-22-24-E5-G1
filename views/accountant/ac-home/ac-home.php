@@ -14,6 +14,7 @@ include "../../../models/db/db.php";
   <title>GSB - Accueil</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -121,6 +122,32 @@ if (!$dbConnect) {
       </table>';
 ?> 
     </div>
+  <div style="width: 20%; margin: auto; padding: 10px;">
+<canvas id="myChart"></canvas>
+</div>
+<script>
+  const ctx = document.getElementById('myChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'pie',  // Type de graphique
+    data: {
+      labels: ['Transport', 'Hébergement', 'Alimentation', 'Autre'],
+      // Les étiquettes sur l'axe X
+      datasets: [{
+        label: ' Répartition des frais',  // Légende du graphique
+        data: [45, 12, 78, 5,],  // Les données pour chaque étiquette
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true  // commencer l'axe Y a zéro
+        }
+      }
+    }
+  });
+  </script>
+
   </main>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
