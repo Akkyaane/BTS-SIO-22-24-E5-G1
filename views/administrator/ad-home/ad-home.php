@@ -1,6 +1,16 @@
 <?php
 
 session_start();
+include "../../../models/db/db.php";
+
+if (!$dbConnect) {
+  echo "Connexion échouée.";
+} else {
+  $sql = 'SELECT * FROM users';
+  $request = $dbConnect->prepare($sql);
+  $request->execute();
+  $data = $request->fetch(PDO::FETCH_ASSOC);
+}
 
 ?>
 
@@ -38,6 +48,71 @@ session_start();
           <?php echo $_SESSION['first_name'] . " " . $_SESSION['last_name'] ?>
         </h3>
       </div>
+    </div>
+
+
+    <div class="container mt-5">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th>Statut</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          if ($data) {
+            while ($array = $request->fetchAll()) {
+              foreach ($array as $row) {
+                if ($row['role'] == "administrator") {
+                  $row['role'] = "Administrateur";
+                }
+                else if ($row['role'] == "accountant") {
+                  $row['role'] = "Comptable";
+                } else {
+                  $row['role'] = "Visiteur";
+                }
+                if ($row['status'] == "1") {
+                  $row['status'] = "Activé";
+                } else {
+                  $row['status'] = "Désactivé";
+                }
+                echo '
+                          <tr>
+                            <td>'.$row['last_name'].'</td>
+                            <td>' .$row['first_name']. '</td>
+                            <td>' .$row['email']. '</td>
+                            <td>'.$row['role'].'</td>
+                            <td>'.$row['status'].'</td>
+                            <td>
+                              <button class="btn btn-sm btn-primary"><a href="../ad-functionalities/ad-UsersArray/ad-ManagePersonnalDataUser.php?updateid=' . $row['id'] . '" style="color: white">Gérer</a></button>
+                            </td>';
+              }
+            }
+          }
+          else {
+            echo '
+                        <tr>
+                          <td>Aucun utilisateur</td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td>
+                          </td>
+                        </tr>
+                        ';
+          }
+          ?>
+        </tbody>
+      </table>
+    </div>
+    <div class="container mt-5" style="display: flex; justify-content: left">
+      <a href="../ad-functionalities/ad-UsersArray/ad-AddUser.php" class="btn btn-primary mb-2">Créer un nouvel utilisateur</a>
     </div>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
