@@ -6,6 +6,7 @@ include "../../../../models/db/db.php";
 if (!$dbConnect) {
     echo "Connexion échouée.";
 } else {
+    $id = $_GET["updateid"];
     $sql = "SELECT * FROM users WHERE id = ?";
     $result = $dbConnect->prepare($sql);
     $result->bindParam(1, $_GET['updateid'], PDO::PARAM_INT);
@@ -80,8 +81,9 @@ if (!$dbConnect) {
         <button type="submit" class="btn btn-primary" name="edit_submit">
           Modifier
         </button>
-        <button type="submit" class="btn btn-danger" name="disable_submit"><a href="../../../../models/administrator/ad-UsersArray/ad-BlockUser.php?updateid=<?php echo $_GET['updateid']; ?>" style="color: white">Désactiver</a>
         </button>
+        <?php if ($data['status'] == 1) { echo "<button type='submit' class='btn btn-danger' name='disable_submit'><a href='../../../../models/administrator/ad-UsersArray/ad-BlockUser.php?updateid= $id' style='color: white'>Désactiver</a>";} ?>
+        <?php if ($data['status'] == 0) { echo "<button type='submit' class='btn btn-primary' name='reactivate_submit'><a href='../../../../models/administrator/ad-UsersArray/ad-ReactivateUser.php?updateid= $id' style='color: white'>Réactiver</a>";} ?>
         </div>
       </form>
     </div>

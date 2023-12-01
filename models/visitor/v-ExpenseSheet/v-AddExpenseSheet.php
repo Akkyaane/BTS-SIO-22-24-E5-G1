@@ -154,10 +154,17 @@ if (!$dbConnect) {
                 $dbConnect->exec('SET FOREIGN_KEY_CHECKS = 1');
                 echo "La fiche de frais a été soumise pour traitement.";
                 echo "<br><br><button><a href='../../../views/visitor/v-home/v-home.php'>Retour</a></button>";
-            }
+            } 
         } else {
-            echo "Un problème est survenu. Veuillez recommencer.";
-            echo "<br><button><a href='../../../views/visitor/v-functionalities/v-ExpenseSheet/v-AddExpenseSheet/v-AddExpenseSheet.php'>Retour</a></button>";
+            $sql = 'INSERT INTO expensesheets (user_id, receipts_id, request_date, start_date, end_date, transport_category, kilometers_number, transport_expense, nights_number, accommodation_expense, food_expense, other_expense, message) VALUES (:ui, :ri, :rd, :sd, :ed, :tc, :kn, :te, :nn, :ae, :fe, :oe, :m)';
+            $request = $dbConnect->prepare($sql);
+            $request->execute($expenseSheet);
+            $sql = 'INSERT INTO receipts (transport_expense, accommodation_expense, food_expense, other_expense) VALUES (:tef, :aef, :fef, :oef)';
+            $request = $dbConnect->prepare($sql);
+            $request->execute($receipts);
+            $dbConnect->exec('SET FOREIGN_KEY_CHECKS = 1');
+            echo "La fiche de frais a été soumise pour traitement.";
+            echo "<br><br><button><a href='../../../views/visitor/v-home/v-home.php'>Retour</a></button>";
         }
     } else {
         echo "Un problème est survenu. Veuillez recommencer.";
