@@ -3,11 +3,11 @@
 session_start();
 include "../../../models/db/db.php";
 
-if (!$db_connect) {
+if (!$dbConnect) {
   echo "Connexion échouée.";
 } else {
   $sql = 'SELECT * FROM users';
-  $request = $db_connect->prepare($sql); // sert à préparer la connexion à la base de donnée
+  $request = $dbConnect->prepare($sql);
   $request->execute();
   $data = $request->fetch(PDO::FETCH_ASSOC);
 }
@@ -59,6 +59,7 @@ if (!$db_connect) {
             <th>Prénom</th>
             <th>Email</th>
             <th>Rôle</th>
+            <th>Statut</th>
             <th></th>
           </tr>
         </thead>
@@ -67,19 +68,28 @@ if (!$db_connect) {
           if ($data) {
             while ($array = $request->fetchAll()) {
               foreach ($array as $row) {
-                $id = $row['id'];
-                $first_name = $row['first_name'];      // sert à afficher le tableau à partir des infos de la bdd
-                $last_name = $row['last_name'];
-                $email = $row['email'];
-                $role = $row['role'];
+                if ($row['role'] == "administrator") {
+                  $row['role'] = "Administrateur";
+                }
+                else if ($row['role'] == "accountant") {
+                  $row['role'] = "Comptable";
+                } else {
+                  $row['role'] = "Visiteur";
+                }
+                if ($row['status'] == "1") {
+                  $row['status'] = "Activé";
+                } else {
+                  $row['status'] = "Désactivé";
+                }
                 echo '
                           <tr>
-                            <td>'.$last_name.'</td>
-                            <td>' .$first_name. '</td>
-                            <td>' .$email. '</td>
-                            <td>'.$role.'</td>
+                            <td>'.$row['last_name'].'</td>
+                            <td>' .$row['first_name']. '</td>
+                            <td>' .$row['email']. '</td>
+                            <td>'.$row['role'].'</td>
+                            <td>'.$row['status'].'</td>
                             <td>
-                              <button class="btn btn-sm btn-primary"><a href="../ad-functionalities/ad-UsersArray/ad-ManagePersonnalDataUser.php?updateid=' . $id . '" style="color: white">Gérer</a></button>
+                              <button class="btn btn-sm btn-primary"><a href="../ad-functionalities/ad-UsersArray/ad-ManagePersonnalDataUser.php?updateid=' . $row['id'] . '" style="color: white">Gérer</a></button>
                             </td>';
               }
             }
@@ -104,10 +114,6 @@ if (!$db_connect) {
     <div class="container mt-5" style="display: flex; justify-content: left">
       <a href="../ad-functionalities/ad-UsersArray/ad-AddUser.php" class="btn btn-primary mb-2">Créer un nouvel utilisateur</a>
     </div>
-
-
-
-
   </main>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"

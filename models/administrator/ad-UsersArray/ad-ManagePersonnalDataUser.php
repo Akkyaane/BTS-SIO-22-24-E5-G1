@@ -12,7 +12,7 @@ if (isset($_POST['edit_submit'])) {
         echo "<br><button><a href='../../../views/administrator/ad-functionalities/ad-UsersArray/ad-ManagePersonnalDataUser.php?updateid=$id'>Retour</a></button>";
     } else {
         $sql = 'UPDATE users SET first_name=:fn, last_name=:ln, email=:e, role=:r WHERE id=:id';
-        $result = $db_connect->prepare($sql);
+        $result = $dbConnect->prepare($sql);
         $result->bindParam(':fn', $user[':fn']);
         $result->bindParam(':ln', $user[':ln']);
         $result->bindParam(':e', $user[':e']);

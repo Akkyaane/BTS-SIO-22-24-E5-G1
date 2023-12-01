@@ -3,13 +3,12 @@
 session_start();
 include "../../../../models/db/db.php";
 
-if (!$db_connect) {
+if (!$dbConnect) {
     echo "Connexion échouée.";
 } else {
-    $id = $_GET['updateid'];
     $sql = "SELECT * FROM users WHERE id = ?";
-    $result = $db_connect->prepare($sql);
-    $result->bindParam(1, $id, PDO::PARAM_INT);
+    $result = $dbConnect->prepare($sql);
+    $result->bindParam(1, $_GET['updateid'], PDO::PARAM_INT);
     $result->execute();
     $data = $result->fetch(PDO::FETCH_ASSOC);
 }
@@ -31,7 +30,7 @@ if (!$db_connect) {
   </head>
   <body>
     <div class="container mt-5">
-      <form action="../../../../models/administrator/ad-UsersArray/ad-ManagePersonnalDataUser.php?updateid=<?php echo $id; ?>" method="post">
+      <form action="../../../../models/administrator/ad-UsersArray/ad-ManagePersonnalDataUser.php?updateid=<?php echo $_GET['updateid']; ?>" method="post">
         <div class="mb-3">
           <p class="h3">Modifier l'utilisateur</p>
         </div>
@@ -65,13 +64,13 @@ if (!$db_connect) {
         <div class="mb-3">
         <select class="form-select" name="role" id="role" required>
                         <option selected hidden>Choisir une fonction</option>
-                        <option value="1" <?php if ($data['role'] == '1')
+                        <option value="administrator" <?php if ($data['role'] == 'administrator') { echo "administrator";}
                             ; ?>>Administrateur
                         </option>
-                        <option value="2" <?php if ($data['role'] == '2')
+                        <option value="accountant" <?php if ($data['role'] == 'accountant') { echo "accountant";}
                             ; ?>>Comptable
                         </option>
-                        <option value="3" <?php if ($data['role'] == '3')
+                        <option value="visitor" <?php if ($data['role'] == 'visitor') { echo "visitor";}
                             ; ?>>Visiteur médical
                         </option>
                     </select>
@@ -81,7 +80,7 @@ if (!$db_connect) {
         <button type="submit" class="btn btn-primary" name="edit_submit">
           Modifier
         </button>
-        <button type="submit" class="btn btn-danger" name="disable_submit"><a href="../../../../models/administrator/ad-UsersArray/ad-BlockUser.php?updateid=<?php echo $id; ?>">Désactiver</a>
+        <button type="submit" class="btn btn-danger" name="disable_submit"><a href="../../../../models/administrator/ad-UsersArray/ad-BlockUser.php?updateid=<?php echo $_GET['updateid']; ?>" style="color: white">Désactiver</a>
         </button>
         </div>
       </form>
