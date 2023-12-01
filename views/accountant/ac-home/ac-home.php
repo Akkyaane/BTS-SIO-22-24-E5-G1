@@ -21,7 +21,7 @@ include "../../../models/db/db.php";
     <h2>Portail GSB</h2>
     <h4>Comptable</h4>
 
-    <div class="container mt-5">
+    <div class="container mt-4">
       <nav class="navbar" style="background : #0d6efd; border: solid white; justify-content: center">
         <ul class="nav">
           <li class="nav-item"><a class="nav-link" href="../v-functionalities/v-PersonnalData/v-UpdatePersonnalData.php"
@@ -36,12 +36,10 @@ include "../../../models/db/db.php";
     </div>
   </header>
   <main>
-    <div class="container mt-5">
-      <div class="mb-3">
-        <h3 style="text-align: center">Bienvenue
-          <?php echo $_SESSION['first_name'] . " " . $_SESSION['last_name'] ?>
-        </h3>
-      </div>
+    <div class="mt-5">
+      <h3 style="text-align: center">Bienvenue
+        <?php echo $_SESSION['first_name'] . " " . $_SESSION['last_name'] ?>
+      </h3>
     </div>
     <div class="container mt-5">
       <table class="table">
@@ -58,7 +56,7 @@ include "../../../models/db/db.php";
         </thead>
         <tbody>
         <?php
-if (!$db_connect) {
+if (!$dbConnect) {
     echo "Connexion échouée.";
     echo "<br><button><a href='../../../views/authentication/login/login.php'>Retour</a></button>";
 } else {
@@ -68,7 +66,7 @@ if (!$db_connect) {
             LEFT JOIN treatment t ON e.id = t.expense_sheet_id
             LEFT JOIN users u ON u.id = e.user_id';
 
-    $request = $db_connect->prepare($sql);
+    $request = $dbConnect->prepare($sql);
     $request->execute();
     $expense_sheets_data = $request->fetchAll();
 
@@ -88,7 +86,7 @@ if (!$db_connect) {
             if ($row['status'] == 1) {
               $status = "Validée";
             }
-            else if ($row['status'] == 0) {
+            else if ($row['status'] == 2) {
               $status = "Refusée";
             }
             echo '<tr>
@@ -98,16 +96,16 @@ if (!$db_connect) {
                     <td>' . $request_date . '</td>
                     <td>' . $last_name . ' ' . $first_name . '</td>
                     <td>';
-                    if ($row['status'] === 0 || $row['status'] === 1) {
+                    if ($row['status'] === 1 || $row['status'] === 2) {
                         echo $status . '</td>
                                 <td>
-                                    <button class="btn btn-sm btn-primary"><a href="../../visitor/v-functionalities/v-ExpenseSheet/v-ReadExpenseSheet.php?readid=' . $id . '" style="color: white">Consulter</a></button>
+                                  <button class="btn btn-sm btn-primary"><a href="../ac-functionalities/ac-ExpenseSheetValidationProcess/ac-ReadExpenseSheet.php?readid=' . $id . '" style="color: white">Consulter</a></button>
                                 </td>';
                     } else if ($row['status'] === null) {
                         echo 'En traitement
                                 </td>
                                 <td>
-                                    <button class="btn btn-sm btn-primary"><a href="../../visitor/v-functionalities/v-ExpenseSheet/v-ReadExpenseSheet.php?readid=' . $id . '" style="color: white">Consulter</a></button>
+                                    <button class="btn btn-sm btn-primary"><a href="../ac-functionalities/ac-ExpenseSheetValidationProcess/ac-ReadExpenseSheet.php?readid=' . $id . '" style="color: white">Consulter</a></button>
                                     <button class="btn btn-sm btn-primary"><a href="../ac-functionalities/ac-ExpenseSheetValidationProcess/ac-UpdateExpenseSheet.php?updateid=' . $id . '" style="color: white">Traiter</a></button>
                                 </td>';
                     }

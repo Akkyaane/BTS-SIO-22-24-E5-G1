@@ -166,12 +166,11 @@ if (!$dbConnect) {
                 <p>Statut :
                     <?php
                     if (!(empty($treatment_data['status']))) {
-                        if ($treatment_data['status'] == 2) {
-                            $status = "Refusée";
-                        } else if ($treatment_data['status'] == 1) {
-                            $status = "Validée";
-                        } else if ($treatment_data['status'] == null) {
-                            echo "En attente de traitement";
+                        if ($treatment_data['status'] == 1) {
+                            echo "Validée"; 
+                        }
+                        else {
+                            echo "Refusée"; 
                         }
                     } else {
                         echo "En attente de traitement";
@@ -186,7 +185,7 @@ if (!$dbConnect) {
                 </p>
             </div>
             <div class="mt-3">
-                <button class="btn btn-primary"><a href="../../v-home/v-home.php" style="color: white; text-decoration: none">Retour</a></button>
+                <button class="btn btn-primary"><a href="../../ac-home/ac-home.php" style="color: white; text-decoration: none">Retour</a></button>
             </div>
         </div>
     </main>
