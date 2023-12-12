@@ -136,13 +136,12 @@ if (!$dbConnect) {
                 $uploadOk = true;
             }
         }
-        if (empty($expenseSheet[':kn']) && empty($expenseSheet[':te']) && empty($expenseSheet[':nn']) && empty($expenseSheet[':ae']) && empty($expenseSheet[':fe']) && empty($expenseSheet[':oe'])) {
-            echo "Aucun montant n'a été saisi. Veuillez recommencer.";
-            echo "<br><button><a href='../../../views/visitor/v-functionalities/v-ExpenseSheet/v-AddExpenseSheet/v-AddExpenseSheet.php'>Retour</a></button>";
-        }
-        if (!(empty($uploadOk))) {
-            if ($uploadOk === false) {
-                echo "Un problème est survenu lors du téléchargement des fichiers. Veuillez recommencer.";
+        if ($uploadOk == true) {
+            if (empty($expenseSheet[':kn']) && empty($expenseSheet[':te']) && empty($expenseSheet[':nn']) && empty($expenseSheet[':ae']) && empty($expenseSheet[':fe']) && empty($expenseSheet[':oe'])) {
+                echo "Aucun montant n'a été saisi. Veuillez recommencer.";
+                echo "<br><button><a href='../../../views/visitor/v-functionalities/v-ExpenseSheet/v-AddExpenseSheet/v-AddExpenseSheet.php'>Retour</a></button>";
+            } else if ($expenseSheet[':te'] > 2500 || ($expenseSheet[':ae']/$expenseSheet[':nn']) > 250 || $expenseSheet[':fe'] > 300) {
+                echo "Une ou plusieurs dépenses a atteint le budget autorisé et n'est pas recevable.";
                 echo "<br><button><a href='../../../views/visitor/v-functionalities/v-ExpenseSheet/v-AddExpenseSheet/v-AddExpenseSheet.php'>Retour</a></button>";
             } else {
                 $sql = 'INSERT INTO expensesheets (user_id, receipts_id, request_date, start_date, end_date, transport_category, kilometers_number, transport_expense, nights_number, accommodation_expense, food_expense, other_expense, message) VALUES (:ui, :ri, :rd, :sd, :ed, :tc, :kn, :te, :nn, :ae, :fe, :oe, :m)';
@@ -154,17 +153,10 @@ if (!$dbConnect) {
                 $dbConnect->exec('SET FOREIGN_KEY_CHECKS = 1');
                 echo "La fiche de frais a été soumise pour traitement.";
                 echo "<br><br><button><a href='../../../views/visitor/v-home/v-home.php'>Retour</a></button>";
-            } 
+                }
         } else {
-            $sql = 'INSERT INTO expensesheets (user_id, receipts_id, request_date, start_date, end_date, transport_category, kilometers_number, transport_expense, nights_number, accommodation_expense, food_expense, other_expense, message) VALUES (:ui, :ri, :rd, :sd, :ed, :tc, :kn, :te, :nn, :ae, :fe, :oe, :m)';
-            $request = $dbConnect->prepare($sql);
-            $request->execute($expenseSheet);
-            $sql = 'INSERT INTO receipts (transport_expense, accommodation_expense, food_expense, other_expense) VALUES (:tef, :aef, :fef, :oef)';
-            $request = $dbConnect->prepare($sql);
-            $request->execute($receipts);
-            $dbConnect->exec('SET FOREIGN_KEY_CHECKS = 1');
-            echo "La fiche de frais a été soumise pour traitement.";
-            echo "<br><br><button><a href='../../../views/visitor/v-home/v-home.php'>Retour</a></button>";
+            echo "Un problème est survenu lors du téléchargement des fichiers. Veuillez recommencer.";
+            echo "<br><button><a href='../../../views/visitor/v-functionalities/v-ExpenseSheet/v-AddExpenseSheet/v-AddExpenseSheet.php'>Retour</a></button>";
         }
     } else {
         echo "Un problème est survenu. Veuillez recommencer.";

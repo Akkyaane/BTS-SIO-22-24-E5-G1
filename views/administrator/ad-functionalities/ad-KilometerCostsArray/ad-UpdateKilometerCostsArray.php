@@ -44,8 +44,8 @@ if (!$dbConnect) {
                     $id = $row['id'];
                     echo '<tr>'?>
                         <form action="../../../../models/administrator/ad-KilometerCostsArray/ad-UpdateKilometerCostsArray.php?'" method="post">
-                            <td><input type="number" step=0.01 class="form-control" name="horsepower" id="horsepower" value="<?php echo $row['horsepower'] ?>"></td>
-                            <td><input type="float" step=0.01 class="form-control" name="cost" id="cost" value="<?php echo $row['cost']?>"></td>
+                            <td><input type="number" step=0.01 class="form-control" name="horsepower[]" id="horsepower" value="<?php echo $row['horsepower'] ?>"></td>
+                            <td><input type="float" step=0.01 class="form-control" name="cost[]" id="cost" value="<?php echo $row['cost']?>"></td>
                         </tr>
             <?php }
             } else {

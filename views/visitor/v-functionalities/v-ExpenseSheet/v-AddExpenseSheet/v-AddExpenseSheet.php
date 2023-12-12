@@ -22,6 +22,9 @@ session_start();
     </header>
     <main>
         <div class="container mt-4">
+            <p>Les frais autres ne seront pas remboursés.</p>
+        </div>
+        <div class="container mt-4">
             <form action="../../../../../models/visitor/v-ExpenseSheet/v-AddExpenseSheet.php" method="post" enctype="multipart/form-data">
                 <div class="mt-3">
                     <h3>Informations générales</h3>
