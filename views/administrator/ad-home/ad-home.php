@@ -112,7 +112,8 @@ if (!$dbConnect) {
       </table>
     </div>
     <div class="container mt-5" style="display: flex; justify-content: left">
-      <a href="../ad-functionalities/ad-UsersArray/ad-AddUser.php" class="btn btn-primary mb-2">Créer un nouvel utilisateur</a>
+    <button class="btn btn-primary mb-2"><a href="../ad-functionalities/ad-UsersArray/ad-AddUser.php" style="color: white; text-decoration: none">Créer un nouvel utilisateur</a></button>
+      <button class="btn btn-primary mb-2" style="margin-left: 5px"><a href="../ad-functionalities/ad-KilometerCostsArray/ad-ReadKilometerCostsArray.php" style="color: white; text-decoration: none">Consulter le tableau des frais kilométriques</a></button>
     </div>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"

@@ -72,7 +72,6 @@ if (!$dbConnect) {
 
     if (!empty($expense_sheets_data)) {
         foreach ($expense_sheets_data as $row) {
-          // var_dump($row);
             $id = $row[0];
             $start_date = $row['start_date'];
             $end_date = $row['end_date'];
@@ -96,7 +95,7 @@ if (!$dbConnect) {
                     <td>' . $request_date . '</td>
                     <td>' . $last_name . ' ' . $first_name . '</td>
                     <td>';
-                    if ($row['status'] === 1 || $row['status'] === 2) {
+                    if ($row['status'] == 1 || $row['status'] == 2) {
                         echo $status . '</td>
                                 <td>
                                   <button class="btn btn-sm btn-primary"><a href="../ac-functionalities/ac-ExpenseSheetValidationProcess/ac-ReadExpenseSheet.php?readid=' . $id . '" style="color: white">Consulter</a></button>
@@ -120,6 +119,9 @@ if (!$dbConnect) {
         echo '</tbody>
       </table>';
 ?> 
+    </div>
+    <div class="container mt-3">
+      <button class="btn btn-primary"><a href="../ac-functionalities/ac-KilometerCostsArray/ac-ReadKilometerCostsArray.php" style="color: white; text-decoration: none">Consulter le tableau des frais kilométriques</a></button>
     </div>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
