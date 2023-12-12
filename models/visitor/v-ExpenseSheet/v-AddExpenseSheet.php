@@ -144,7 +144,15 @@ if (!$dbConnect) {
                 echo "Une ou plusieurs dépenses a atteint le budget autorisé et n'est pas recevable.";
                 echo "<br><button><a href='../../../views/visitor/v-functionalities/v-ExpenseSheet/v-AddExpenseSheet/v-AddExpenseSheet.php'>Retour</a></button>";
             } else {
-                $sql = 'INSERT INTO expensesheets (user_id, receipts_id, request_date, start_date, end_date, transport_category, kilometers_number, transport_expense, nights_number, accommodation_expense, food_expense, other_expense, message) VALUES (:ui, :ri, :rd, :sd, :ed, :tc, :kn, :te, :nn, :ae, :fe, :oe, :m)';
+                $sql = 'SELECT u.horsepower, kc.* FROM users u INNER JOIN kilometercosts kc ON u.horsepower = kc.horsepower WHERE u.id = ?';
+                $kilometer_costs = $dbConnect->prepare($sql);
+                $kilometer_costs->bindParam(1, $_SESSION['id'], PDO::PARAM_INT);
+                $kilometer_costs->execute();
+                $kilometer_costs_data = $kilometer_costs->fetch();
+                $expenseSheet[':ta'] = $kilometer_costs_data['cost'] * $expenseSheet[':kn'];
+                $expenseSheet[':ta'] = $expenseSheet[':ta'] + $expenseSheet[':te'] + $expenseSheet[':ae'] + $expenseSheet[':fe'];
+                $expenseSheet[':ta'] = round($expenseSheet[':ta'], 2);
+                $sql = 'INSERT INTO expensesheets (user_id, receipts_id, request_date, start_date, end_date, transport_category, kilometers_number, transport_expense, nights_number, accommodation_expense, food_expense, other_expense, message, total_amount) VALUES (:ui, :ri, :rd, :sd, :ed, :tc, :kn, :te, :nn, :ae, :fe, :oe, :m, :ta)';
                 $request = $dbConnect->prepare($sql);
                 $request->execute($expenseSheet);
                 $sql = 'INSERT INTO receipts (transport_expense, accommodation_expense, food_expense, other_expense) VALUES (:tef, :aef, :fef, :oef)';

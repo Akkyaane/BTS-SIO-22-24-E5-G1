@@ -72,7 +72,7 @@ include "../../../models/db/db.php";
                     echo '<td>' . $row['nights_number'] . '</td>';
                   }
                   echo '
-                              <td>Indisponible</td>
+                              <td>' . $row['total_amount'] . '</td>
                               <td>' . $row['request_date'] . '</td>';
                   if (!(empty($row['status']))) {
                     if ($row['status'] == 1) {
@@ -116,7 +116,7 @@ include "../../../models/db/db.php";
                       echo '<td>' . $row['nights_number'] . '</td>';
                     }
                     echo '
-                              <td>Indisponible</td>
+                              <td>' . $row['total_amount'] . '</td>
                               <td>' . $row['request_date'] . '</td>';
                     if (!(empty($row['status']))) {
                       if ($row['status'] == 1) {

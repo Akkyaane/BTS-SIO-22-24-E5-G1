@@ -91,7 +91,7 @@ if (!$dbConnect) {
             echo '<tr>
                     <td>Du <strong>' . $start_date . '</strong> au <strong>' . $end_date . '</strong></td>
                     <td>' . $nights_number . '</td>
-                    <td>Indisponible</td>
+                    <td>' . $row['total_amount'] . '</td>
                     <td>' . $request_date . '</td>
                     <td>' . $last_name . ' ' . $first_name . '</td>
                     <td>';
