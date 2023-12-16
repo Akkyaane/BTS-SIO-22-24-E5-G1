@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Hôte : localhost:8889
--- Généré le : mar. 12 déc. 2023 à 14:57
--- Version du serveur : 5.7.39
--- Version de PHP : 8.2.0
+-- Hôte : 127.0.0.1:3306
+-- Généré le : sam. 16 déc. 2023 à 14:10
+-- Version du serveur : 8.0.31
+-- Version de PHP : 8.0.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -27,23 +27,40 @@ SET time_zone = "+00:00";
 -- Structure de la table `expensesheets`
 --
 
-CREATE TABLE `expensesheets` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `receipts_id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `expensesheets`;
+CREATE TABLE IF NOT EXISTS `expensesheets` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `receipts_id` int NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
   `request_date` date NOT NULL,
-  `transport_category` int(1) DEFAULT NULL,
-  `kilometers_number` int(11) DEFAULT NULL,
+  `transport_category` int DEFAULT NULL,
+  `kilometers_number` int DEFAULT NULL,
+  `kilometer_expense` float DEFAULT NULL,
+  `kilometer_expense_refund` float DEFAULT NULL,
+  `kilometer_expense_unrefund` float DEFAULT NULL,
   `transport_expense` float DEFAULT NULL,
-  `nights_number` int(11) DEFAULT NULL,
+  `transport_expense_refund` float DEFAULT NULL,
+  `transport_expense_unrefund` float DEFAULT NULL,
+  `nights_number` int DEFAULT NULL,
   `accommodation_expense` float DEFAULT NULL,
+  `accommodation_expense_refund` float DEFAULT NULL,
+  `accommodation_expense_unrefund` float DEFAULT NULL,
   `food_expense` float DEFAULT NULL,
+  `food_expense_refund` float DEFAULT NULL,
+  `food_expense_unrefund` float DEFAULT NULL,
   `other_expense` float DEFAULT NULL,
+  `other_expense_refund` float DEFAULT NULL,
+  `other_expense_unrefund` float DEFAULT NULL,
   `message` varchar(500) DEFAULT NULL,
-  `total_amount` float DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `total_amount` float DEFAULT NULL,
+  `total_amount_refund` float DEFAULT NULL,
+  `total_amount_unrefund` float DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_user` (`user_id`),
+  KEY `receipts_id` (`receipts_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -51,11 +68,13 @@ CREATE TABLE `expensesheets` (
 -- Structure de la table `kilometercosts`
 --
 
-CREATE TABLE `kilometercosts` (
-  `id` int(11) NOT NULL,
-  `horsepower` int(1) NOT NULL,
-  `cost` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `kilometercosts`;
+CREATE TABLE IF NOT EXISTS `kilometercosts` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `horsepower` int NOT NULL,
+  `cost` float NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
 
 --
 -- Déchargement des données de la table `kilometercosts`
@@ -74,13 +93,15 @@ INSERT INTO `kilometercosts` (`id`, `horsepower`, `cost`) VALUES
 -- Structure de la table `receipts`
 --
 
-CREATE TABLE `receipts` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `receipts`;
+CREATE TABLE IF NOT EXISTS `receipts` (
+  `id` int NOT NULL AUTO_INCREMENT,
   `transport_expense` varchar(255) DEFAULT NULL,
   `accommodation_expense` varchar(255) DEFAULT NULL,
   `food_expense` varchar(255) DEFAULT NULL,
-  `other_expense` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `other_expense` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -88,12 +109,15 @@ CREATE TABLE `receipts` (
 -- Structure de la table `treatment`
 --
 
-CREATE TABLE `treatment` (
-  `id` int(11) NOT NULL,
-  `expense_sheet_id` int(11) NOT NULL,
-  `status` int(1) DEFAULT NULL,
-  `remark` varchar(500) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `treatment`;
+CREATE TABLE IF NOT EXISTS `treatment` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `expense_sheet_id` int NOT NULL,
+  `status` int DEFAULT NULL,
+  `remark` varchar(500) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `expense_sheet_id` (`expense_sheet_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
@@ -101,16 +125,18 @@ CREATE TABLE `treatment` (
 -- Structure de la table `users`
 --
 
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int NOT NULL AUTO_INCREMENT,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `role` varchar(15) NOT NULL,
-  `horsepower` int(1) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `horsepower` int NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
 
 --
 -- Déchargement des données de la table `users`
@@ -124,77 +150,6 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `password`, `role
 (5, 'Minerva', 'McGonagall', 'minervamcgonagall@gmail.com', '$2y$10$qxiVTx.MR9yJDexKOs6.fO5nTQ5EdE0QbaiAVUz0MwVHmaV1ZACHG', 'visitor', 7, 1);
 
 --
--- Index pour les tables déchargées
---
-
---
--- Index pour la table `expensesheets`
---
-ALTER TABLE `expensesheets`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_user` (`user_id`),
-  ADD KEY `receipts_id` (`receipts_id`);
-
---
--- Index pour la table `kilometercosts`
---
-ALTER TABLE `kilometercosts`
-  ADD PRIMARY KEY (`id`);
-
---
--- Index pour la table `receipts`
---
-ALTER TABLE `receipts`
-  ADD PRIMARY KEY (`id`);
-
---
--- Index pour la table `treatment`
---
-ALTER TABLE `treatment`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `expense_sheet_id` (`expense_sheet_id`);
-
---
--- Index pour la table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT pour les tables déchargées
---
-
---
--- AUTO_INCREMENT pour la table `expensesheets`
---
-ALTER TABLE `expensesheets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `kilometercosts`
---
-ALTER TABLE `kilometercosts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT pour la table `receipts`
---
-ALTER TABLE `receipts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `treatment`
---
-ALTER TABLE `treatment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
 -- Contraintes pour les tables déchargées
 --
 
@@ -202,14 +157,14 @@ ALTER TABLE `users`
 -- Contraintes pour la table `expensesheets`
 --
 ALTER TABLE `expensesheets`
-  ADD CONSTRAINT `expensesheets_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `expensesheets_ibfk_3` FOREIGN KEY (`receipts_id`) REFERENCES `receipts` (`id`);
+  ADD CONSTRAINT `expensesheets_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `expensesheets_ibfk_3` FOREIGN KEY (`receipts_id`) REFERENCES `receipts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `treatment`
 --
 ALTER TABLE `treatment`
-  ADD CONSTRAINT `treatment_ibfk_1` FOREIGN KEY (`expense_sheet_id`) REFERENCES `expensesheets` (`id`);
+  ADD CONSTRAINT `treatment_ibfk_1` FOREIGN KEY (`expense_sheet_id`) REFERENCES `expensesheets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

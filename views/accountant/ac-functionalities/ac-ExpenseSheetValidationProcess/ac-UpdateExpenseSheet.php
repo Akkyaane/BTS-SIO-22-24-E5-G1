@@ -25,6 +25,9 @@ if (!$dbConnect) {
         $treatment_data_request->execute();
         $treatment_data = $treatment_data_request->fetch(PDO::FETCH_ASSOC);
     }
+    $startDate = new DateTime($expense_sheets_data['start_date']);
+    $endDate = new DateTime($expense_sheets_data['end_date']);
+    $requestDate = new DateTime($expense_sheets_data['request_date']);
 }
 
 ?>
@@ -47,16 +50,16 @@ if (!$dbConnect) {
     </header>
     <main>
         <div class="container mt-4">
-            <div class="mt-3">
+        <div class="mt-3">
                 <h3>Informations générales</h3>
+                <p>Demande effectuée le :
+                    <?php echo $startDate->format('d/m/Y'); ?>
+                </p>
                 <p>Date de départ :
-                    <?php echo $expense_sheets_data['start_date']; ?>
+                    <?php echo $endDate->format('d/m/Y'); ?>
                 </p>
                 <p>Date de retour :
-                    <?php echo $expense_sheets_data['end_date']; ?>
-                </p>
-                <p>Demande effectuée le :
-                    <?php echo $expense_sheets_data['request_date']; ?>
+                    <?php echo $requestDate->format('d/m/Y'); ?>
                 </p>
             </div>
             <div class="mt-3">
@@ -83,8 +86,36 @@ if (!$dbConnect) {
                     } ?>
                 </p>
                 <p>Montant total en euros :
-                    <?php if (!(empty($expense_sheets_data['transport_expense']))) {
+                <?php if (!(empty($expense_sheets_data['kilometers_number']))) {
+                        echo $expense_sheets_data['kilometer_expense'];
+                    } else if (!(empty($expense_sheets_data['transport_expense']))) {
                         echo $expense_sheets_data['transport_expense'];
+                    } else {
+                        echo "N/A";
+                    } ?>
+                </p>
+                <p>Montant à rembourser :
+                <?php if (!(empty($expense_sheets_data['kilometers_number']))) {
+                        echo $expense_sheets_data['kilometer_expense_refund'];
+                    } else if (!(empty($expense_sheets_data['transport_expense']))) {
+                        echo $expense_sheets_data['transport_expense_refund'];
+                    } else {
+                        echo "N/A";
+                    } ?>
+                </p>
+                <p>Reste à payer :
+                <?php if (!(empty($expense_sheets_data['kilometers_number']))) {
+                        if ($expense_sheets_data['kilometer_expense_unrefund'] == NULL) {
+                            echo '0';
+                        } else {
+                            echo $expense_sheets_data['kilometer_expense_unrefund'];
+                        };
+                    } else if (!(empty($expense_sheets_data['transport_expense']))) {
+                        if ($expense_sheets_data['transport_expense_unrefund'] == NULL) {
+                            echo '0';
+                        } else {
+                            echo $expense_sheets_data['transport_expense_unrefund'];
+                        };
                     } else {
                         echo "N/A";
                     } ?>
@@ -101,14 +132,32 @@ if (!$dbConnect) {
                 <h4>Hébergement</h4>
                 <p>Nombre de nuitées :
                     <?php if (!(empty($expense_sheets_data['nights_number']))) {
-                        echo "<a href=../" . $expense_sheets_data['nights_number'] . ">Consulter</a>";
+                        echo $expense_sheets_data['nights_number'];
                     } else {
                         echo "N/A";
                     } ?>
                 </p>
-                <p>Montal total en euros :
+                <p>Montant total en euros :
                     <?php if (!(empty($expense_sheets_data['accommodation_expense']))) {
                         echo $expense_sheets_data['accommodation_expense'];
+                    } else {
+                        echo "N/A";
+                    } ?>
+                </p>
+                <p>Montant à rembourser :
+                    <?php if (!(empty($expense_sheets_data['accommodation_expense']))) {
+                        echo $expense_sheets_data['accommodation_expense_refund'];
+                    } else {
+                        echo "N/A";
+                    } ?>
+                </p>
+                <p>Reste à payer :
+                    <?php if (!(empty($expense_sheets_data['accommodation_expense']))) {
+                        if ($expense_sheets_data['accommodation_expense_unrefund'] == NULL) {
+                            echo '0';
+                        } else {
+                            echo $expense_sheets_data['accommodation_expense_unrefund'];
+                        };
                     } else {
                         echo "N/A";
                     } ?>
@@ -123,9 +172,27 @@ if (!$dbConnect) {
             </div>
             <div class="mt-3">
                 <h4>Alimentation</h4>
-                <p>Montal total en euros :
+                <p>Montant total en euros :
                     <?php if (!(empty($expense_sheets_data['food_expense']))) {
                         echo $expense_sheets_data['food_expense'];
+                    } else {
+                        echo "N/A";
+                    } ?>
+                </p>
+                <p>Montant à rembourser :
+                    <?php if (!(empty($expense_sheets_data['food_expense']))) {
+                        echo $expense_sheets_data['food_expense_refund'];
+                    } else {
+                        echo "N/A";
+                    } ?>
+                </p>
+                <p>Reste à payer :
+                    <?php if (!(empty($expense_sheets_data['food_expense']))) {
+                        if ($expense_sheets_data['food_expense_unrefund'] == NULL) {
+                            echo '0';
+                        } else {
+                            echo $expense_sheets_data['food_expense_unrefund'];
+                        };
                     } else {
                         echo "N/A";
                     } ?>
@@ -143,6 +210,24 @@ if (!$dbConnect) {
                 <p>Montant total en euros :
                     <?php if (!(empty($expense_sheets_data['other_expense']))) {
                         echo $expense_sheets_data['other_expense'];
+                    } else {
+                        echo "N/A";
+                    } ?>
+                </p>
+                <p>Montant à rembourser :
+                    <?php if (!(empty($expense_sheets_data['other_expense']))) {
+                        echo $expense_sheets_data['other_expense_refund'];
+                    } else {
+                        echo "N/A";
+                    } ?>
+                </p>
+                <p>Reste à payer :
+                    <?php if (!(empty($expense_sheets_data['other_expense']))) {
+                        if ($expense_sheets_data['other_expense_unrefund'] == NULL) {
+                            echo '0';
+                        } else {
+                            echo $expense_sheets_data['other_expense_unrefund'];
+                        };
                     } else {
                         echo "N/A";
                     } ?>

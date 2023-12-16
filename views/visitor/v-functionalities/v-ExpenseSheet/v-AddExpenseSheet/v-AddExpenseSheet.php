@@ -22,7 +22,7 @@ session_start();
     </header>
     <main>
         <div class="container mt-4">
-            <p>Les frais autres ne seront pas remboursés.</p>
+            <p>Le montant total des dépenses dépassant le budget fixé pour chaque catégorie ne sera pas remboursé. Veuillez laisser le champ vide, si aucune dépense n'a été faite.</p>
         </div>
         <div class="container mt-4">
             <form action="../../../../../models/visitor/v-ExpenseSheet/v-AddExpenseSheet.php" method="post" enctype="multipart/form-data">
@@ -54,6 +54,7 @@ session_start();
                     <input type="number" step=0.01 class="form-control hidden" name="kilometers_number" id="kilometers_number" placeholder="Nombre total de kilomètres">
                 </div>
                 <div class="mt-3">
+                    <p id="transport_expense_limit" class="hidden">Montant maximum : 2500 €</p>
                     <input type="number" step=0.01 class="form-control hidden" name="transport_expense" id="transport_expense" placeholder="Montant total en euros">
                 </div>
                 <div class="mt-3">
@@ -61,6 +62,7 @@ session_start();
                 </div>
                 <div class="mt-3">
                     <h5>Hébergement</h5>
+                    <p>Montant maximum : 250 €</p>
                     <input type="number" class="form-control" name="nights_number" id="nights_number" placeholder="Nombre de nuitées">
                 </div>
                 <div class="mt-3">
@@ -71,6 +73,7 @@ session_start();
                 </div>
                 <div class="mt-3">
                     <h5>Alimentation</h5>
+                    <p>Montant maximum : 300 €</p>
                     <input type="number" step=0.01 class="form-control" name="food_expense" id="food_expense" placeholder="Montant total en euros">
                 </div>
                 <div class="mt-3">
@@ -78,6 +81,7 @@ session_start();
                 </div>
                 <div class="mt-3">
                     <h5>Autres</h5>
+                    <p>Montant maximum : 200 €</p>
                     <input type="number" step=0.01 class="form-control" name="other_expense" id="other_expense" placeholder="Montant total en euros">
                 </div>
                 <div class="mt-3">

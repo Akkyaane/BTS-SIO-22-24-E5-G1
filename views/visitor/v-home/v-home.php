@@ -44,8 +44,10 @@ include "../../../models/db/db.php";
           <tr>
             <th>Période</th>
             <th>Nuitées</th>
-            <th>Montant</th>
             <th>Créée le</th>
+            <th>Montant total</th>
+            <th>Montant à rembourser</th>
+            <th>Reste à payer</th>
             <th>Traitement</th>
             <th></th>
           </tr>
@@ -63,8 +65,12 @@ include "../../../models/db/db.php";
             while ($array = $request->fetchAll()) {
               if (!(empty($array))) {
                 foreach ($array as $row) {
+                  $startDate = new DateTime($row['start_date']);
+                  $endDate = new DateTime($row['end_date']);
+                  $requestDate = new DateTime($row['request_date']);
                   echo '<tr>
-                              <td>Du ' . '<strong>' . $row['start_date'] . '</strong>' . ' au ' . '<strong>' . $row['end_date'] . '</strong></td>';
+                      <td>Du <strong>' . $startDate->format('d/m/Y') . '</strong> au <strong>' . $endDate->format('d/m/Y') . '</strong></td>';
+                  
                   if ($row['nights_number'] == NULL) {
                     $row['nights_number'] = 0;
                     echo '<td>' . $row['nights_number'] . '</td>';
@@ -72,8 +78,10 @@ include "../../../models/db/db.php";
                     echo '<td>' . $row['nights_number'] . '</td>';
                   }
                   echo '
+                              <td>' . $requestDate->format('d/m/Y') . '</td>
                               <td>' . $row['total_amount'] . '</td>
-                              <td>' . $row['request_date'] . '</td>';
+                              <td>'.$row['total_amount_refund'].'</td>
+                              <td>' . $row['total_amount_unrefund'] . '</td>';  
                   if (!(empty($row['status']))) {
                     if ($row['status'] == 1) {
                       echo '
@@ -83,7 +91,7 @@ include "../../../models/db/db.php";
                                   </td>';
                     } 
                     if ($row['status'] == 2) {
-                      echo '        
+                      echo '  
                                   <td>Refusée</td>
                                   <td>
                                   <button class="btn btn-sm btn-primary"><a href="../v-functionalities/v-ExpenseSheet/v-ReadExpenseSheet.php?readid=' . $row['1'] . '"style="color: white; text-decoration: none">Consulter</a></button>
@@ -146,7 +154,7 @@ include "../../../models/db/db.php";
                 }
               }
             }
-          }
+          };
           ?>
         </tbody>
       </table>

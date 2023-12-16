@@ -47,9 +47,11 @@ include "../../../models/db/db.php";
           <tr>
             <th>Période</th>
             <th>Nuitées</th>
-            <th>Montant</th>
             <th>Créée le</th>
-            <th>Par :</th>
+            <th>Par</th>
+            <th>Montant total</th>
+            <th>Montant à rembourser</th>
+            <th>Reste à payer</th>
             <th>Traitement</th>
             <th></th>
           </tr>
@@ -72,16 +74,13 @@ if (!$dbConnect) {
 
     if (!empty($expense_sheets_data)) {
         foreach ($expense_sheets_data as $row) {
+            $startDate = new DateTime($row['start_date']);
+            $endDate = new DateTime($row['end_date']);
+            $requestDate = new DateTime($row['request_date']);
             $id = $row[0];
-            $start_date = $row['start_date'];
-            $end_date = $row['end_date'];
-            $nights_number = $row['nights_number'];
-            if ($nights_number === NULL) {
-                $nights_number = 0;
+            if ($row['nights_number'] == NULL) {
+              $row['nights_number'] = 0;
             }
-            $request_date = $row['request_date'];
-            $last_name = $row['last_name'];
-            $first_name = $row['first_name'];
             if ($row['status'] == 1) {
               $status = "Validée";
             }
@@ -89,11 +88,14 @@ if (!$dbConnect) {
               $status = "Refusée";
             }
             echo '<tr>
-                    <td>Du <strong>' . $start_date . '</strong> au <strong>' . $end_date . '</strong></td>
-                    <td>' . $nights_number . '</td>
+            <td>Du <strong>' . $startDate->format('d/m/Y') . '</strong> au <strong>' . $endDate->format('d/m/Y') . '</strong></td>
+        
+                    <td>' . $row['nights_number'] . '</td>
+                    <td>' . $requestDate->format('d/m/Y') . '</td>
+                    <td>' . $row['last_name'] . ' ' . $row['first_name'] . '</td>
                     <td>' . $row['total_amount'] . '</td>
-                    <td>' . $request_date . '</td>
-                    <td>' . $last_name . ' ' . $first_name . '</td>
+                    <td>'.$row['total_amount_refund'].'</td>
+                    <td>' . $row['total_amount_unrefund'] . '
                     <td>';
                     if ($row['status'] == 1 || $row['status'] == 2) {
                         echo $status . '</td>

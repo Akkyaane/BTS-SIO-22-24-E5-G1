@@ -12,6 +12,9 @@ if (!$dbConnect) {
     $expense_sheets_data_request->bindParam(1, $_GET['updateid'], PDO::PARAM_INT);
     $expense_sheets_data_request->execute();
     $expense_sheets_data = $expense_sheets_data_request->fetch(PDO::FETCH_ASSOC);
+    $startDate = new DateTime($expense_sheets_data['start_date']);
+    $endDate = new DateTime($expense_sheets_data['end_date']);
+    $requestDate = new DateTime($expense_sheets_data['request_date']);
 }
 
 ?>
@@ -33,6 +36,9 @@ if (!$dbConnect) {
         <h1 class="text-center">Modifier la fiche de frais</h1>
     </header>
     <main>
+        <div class="container mt-4">
+            <p>Le montant total des dépenses dépassant le budget fixé pour chaque catégorie ne sera pas remboursé.</p>
+        </div>
         <div class="container mt-4">
             <form action="../../../../models/visitor/v-ExpenseSheet/v-UpdateExpenseSheet.php?updateid=<?php echo $_GET['updateid']; ?>" method="post" enctype="multipart/form-data">
                 <div class="mt-3">
@@ -71,6 +77,7 @@ if (!$dbConnect) {
                     <input type="number" step=0.01 class="form-control hidden" name="kilometers_number" id="kilometers_number" placeholder="Nombre total de kilomètres" value="<?php echo $expense_sheets_data['kilometers_number']; ?>">
                 </div>
                 <div class="mt-3">
+                    <p id="transport_expense_limit" class="hidden">Montant maximum : 2500 €</p>
                     <input type="number" step=0.01 class="form-control hidden" name="transport_expense" id="transport_expense" placeholder="Montant total en euros" value="<?php echo $expense_sheets_data['transport_expense']; ?>">
                 </div>
                 <div class="mt-3">
@@ -78,6 +85,7 @@ if (!$dbConnect) {
                 </div>
                 <div class="mt-3">
                     <h5>Hébergement</h5>
+                    <p>Montant maximum : 250 €</p>
                     <input type="number" class="form-control" name="nights_number" id="nights_number" placeholder="Nombre de nuitées" value="<?php echo $expense_sheets_data['nights_number']; ?>">
                 </div>
                 <div class="mt-3">
@@ -88,6 +96,7 @@ if (!$dbConnect) {
                 </div>
                 <div class="mt-3">
                     <h5>Alimentation</h5>
+                    <p>Montant maximum : 300 €</p>
                     <input type="number" step=0.01 class="form-control" name="food_expense" id="food_expense" placeholder="Montant total en euros" value="<?php echo $expense_sheets_data['food_expense']; ?>">
                 </div>
                 <div class="mt-3">
@@ -95,6 +104,7 @@ if (!$dbConnect) {
                 </div>
                 <div class="mt-3">
                     <h5>Autres</h5>
+                    <p>Montant maximum : 200 €</p>
                     <input type="number" step=0.01 class="form-control" name="other_expense" id="other_expense" placeholder="Montant total en euros" value="<?php echo $expense_sheets_data['other_expense']; ?>">
                 </div>
                 <div class="mt-3">

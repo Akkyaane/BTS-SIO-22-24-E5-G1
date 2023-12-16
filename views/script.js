@@ -2,6 +2,7 @@ function showDiv(select) {
   const selectedValue = parseInt(select.value);
 
   const kilometersNumber = document.getElementById("kilometers_number");
+  const transportExpenseLimit = document.getElementById("transport_expense_limit");
   const transportExpense = document.getElementById("transport_expense");
   const transportExpenseFile = document.getElementById(
     "transport_expense_file"
@@ -9,10 +10,12 @@ function showDiv(select) {
 
   if (selectedValue != 4) {
     kilometersNumber.style.display = "none";
+    transportExpenseLimit.style.display = "block";
     transportExpense.style.display = "block";
     transportExpenseFile.style.display = "block";
   } else {
     kilometersNumber.style.display = "block";
+    transportExpenseLimit.style.display = "none";
     transportExpense.style.display = "none";
     transportExpenseFile.style.display = "none";
   }
