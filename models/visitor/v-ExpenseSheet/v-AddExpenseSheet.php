@@ -11,11 +11,21 @@ if (!$dbConnect) {
     $target_dir = "../../../content/uploads/";
     if (isset($_POST['submit'])) {
         $dbConnect->exec('SET FOREIGN_KEY_CHECKS = 0');
-        $sql = 'SELECT u.horsepower, kc.* FROM users u INNER JOIN kilometercosts kc ON u.horsepower = kc.horsepower WHERE u.id = ?';
-        $kilometer_costs = $dbConnect->prepare($sql);
-        $kilometer_costs->bindParam(1, $_SESSION['id'], PDO::PARAM_INT);
-        $kilometer_costs->execute();
-        $kilometer_costs_data = $kilometer_costs->fetch();
+        $sql = 'SELECT horsepower FROM users u WHERE u.id = ?';
+        $horsepower_data_request = $dbConnect->prepare($sql);
+        $horsepower_data_request->bindParam(1, $_SESSION['id'], PDO::PARAM_INT);
+        $horsepower_data_request->execute();
+        $horsepower_data = $horsepower_data_request->fetch();
+        if ($horsepower_data['horsepower'] < 3) {
+            $horsepower_data['horsepower'] = 3;
+        } else if ($horsepower_data['horsepower'] > 7) {
+            $horsepower_data['horsepower'] = 7;
+        }
+        $sql = 'SELECT * FROM kilometercosts kc WHERE kc.horsepower = ?';
+        $kilometer_costs_data_request = $dbConnect->prepare($sql);
+        $kilometer_costs_data_request->bindParam(1, $horsepower_data['horsepower'], PDO::PARAM_INT);
+        $kilometer_costs_data_request->execute();
+        $kilometer_costs_data = $kilometer_costs_data_request->fetch();
         $sql = 'SELECT MAX(id) AS max_id FROM receipts';
         $request = $dbConnect->prepare($sql);
         $request->execute();

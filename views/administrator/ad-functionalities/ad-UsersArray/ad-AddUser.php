@@ -10,6 +10,8 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="../../../visitor/v-functionalities/v-ExpenseSheet/v-AddExpenseSheet/v-AddExpenseSheet.css">
+    <script defer src="../../../script.js"></script>
   </head>
   <body>
     <div class="container mt-5">
@@ -63,12 +65,21 @@
           />
         </div>
         <div class="mb-3">
-          <select class="form-select" name="role" required>
+          <select class="form-select" name="role" onchange="showDiv1(this)" required>
             <option disabled selected value>Choisir une fonction</option>
-            <option value="1">Administrateur</option>
-            <option value="2">Comptable</option>
-            <option value="3">Visiteur médical</option>
+            <option value="administrator">Administrateur</option>
+            <option value="accountant">Comptable</option>
+            <option value="visitor">Visiteur médical</option>
           </select>
+        </div>
+        <div class="mb-3 hidden" id="horsepower">
+          <input
+            type="number"
+            class="form-control"
+            name="horsepower"
+            placeholder="Nombre de chevaux"
+            required
+          />
         </div>
         <button type="submit" class="btn btn-primary" name="submit">
           Envoyer

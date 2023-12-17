@@ -76,6 +76,18 @@ if (!$dbConnect) {
                         </option>
                     </select>
         </div>
+        <?php if ($data['role'] == 'visitor') {
+          echo '
+          <div class="mb-3">
+          <input
+            type="number"
+            class="form-control"
+            name="horsepower"
+            value="'. $data['horsepower'] .'"
+            required
+          />
+          </div>';
+        } ?>
         <button class="btn btn-primary"><a href="../../ad-home/ad-home.php" style="color: white;">Retour</a>
         </button>
         <button type="submit" class="btn btn-primary" name="edit_submit">

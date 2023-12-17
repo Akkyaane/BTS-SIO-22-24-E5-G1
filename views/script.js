@@ -21,6 +21,17 @@ function showDiv(select) {
   }
 }
 
+function showDiv1(select) {
+  const selectedValue = select.value;
+  const horsepower = document.getElementById("horsepower");
+
+  if (selectedValue == 'visitor') {
+    horsepower.classList.remove("hidden");
+  } else {
+    horsepower.classList.add("hidden");
+  }
+}
+
 function charCount() {
   const textarea = document.getElementById("message");
   const charCount = document.getElementById("charCount");
